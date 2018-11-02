@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andwari.main.player.TabPlayerController">
+   <center>
+      <TableView fx:id="tvListOfPlayers" BorderPane.alignment="CENTER">
+        <columns>
+          
+        </columns>
+      </TableView>
+   </center>
+   <right>
+      <FlowPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="TOP_LEFT">
+         <children>
+            <Label alignment="CENTER" prefWidth="280.0" text="Add a new Player" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <HBox prefWidth="280.0">
+               <children>
+                  <Label prefWidth="100.0" text="Playername" />
+                  <TextField fx:id="tfPlayername" prefWidth="200.0" />
+               </children>
+               <FlowPane.margin>
+                  <Insets left="10.0" top="10.0" />
+               </FlowPane.margin>
+            </HBox>
+            <HBox prefWidth="280.0">
+               <children>
+                  <Label prefWidth="100.0" text="DCI-Number" />
+                  <TextField fx:id="tfDciNumber" prefWidth="200.0" />
+               </children>
+               <FlowPane.margin>
+                  <Insets left="10.0" top="10.0" />
+               </FlowPane.margin>
+            </HBox>
+            <Button fx:id="btnAddPlayer" mnemonicParsing="false" onAction="#addPlayer" text="Add Player">
+               <FlowPane.margin>
+                  <Insets left="20.0" top="10.0" />
+               </FlowPane.margin>
+            </Button>
+            <Separator prefWidth="280.0">
+               <FlowPane.margin>
+                  <Insets left="10.0" top="10.0" />
+               </FlowPane.margin>
+            </Separator>
+            <Button mnemonicParsing="false" onAction="#deletePlayer" text="Delete selected Player">
+               <FlowPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </FlowPane.margin>
+            </Button>
+            <Label fx:id="lbWarning" prefWidth="280.0" text="Warning: Player already exists!" textAlignment="CENTER" textFill="RED" visible="false">
+               <font>
+                  <Font name="Calibri" size="14.0" />
+               </font>
+               <FlowPane.margin>
+                  <Insets left="30.0" top="30.0" />
+               </FlowPane.margin>
+            </Label>
+         </children></FlowPane>
+   </right>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+   <top>
+      <FlowPane columnHalignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Search for Player:">
+               <FlowPane.margin>
+                  <Insets right="20.0" />
+               </FlowPane.margin>
+            </Label>
+            <TextField fx:id="tfSearch" prefWidth="300.0" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </FlowPane>
+   </top>
+</BorderPane>

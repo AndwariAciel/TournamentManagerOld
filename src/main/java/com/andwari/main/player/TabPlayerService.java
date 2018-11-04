@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.andwari.core.tournamentcore.player.boundary.PlayerService;
 import com.andwari.core.tournamentcore.player.entity.Player;
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
 
 public class TabPlayerService {
 
+	@Inject
 	private PlayerService playerService;
-
+	
 	public TabPlayerService() {
-		playerService = new PlayerService();
+		System.out.println();
 	}
 
 	public Collection<PlayerDVO> getAllPlayersFromDatabase() {

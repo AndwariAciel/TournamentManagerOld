@@ -1,5 +1,7 @@
 package com.andwari.main.player;
 
+import javax.inject.Inject;
+
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
 import com.andwari.util.ColumnsFactory;
 
@@ -33,6 +35,7 @@ public class TabPlayerController {
 	
 	private ObservableList<PlayerDVO> listOfPlayers;
 	
+	@Inject
 	private TabPlayerService tabPlayerService;
 	
 	@FXML
@@ -40,8 +43,6 @@ public class TabPlayerController {
 		
 	@FXML
     public void initialize() {
-		tabPlayerService = new TabPlayerService();
-		
 		listOfPlayers = FXCollections.observableArrayList(tabPlayerService.getAllPlayersFromDatabase());		
 
 		tvListOfPlayers.setItems(listOfPlayers);

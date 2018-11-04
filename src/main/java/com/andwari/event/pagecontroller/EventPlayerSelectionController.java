@@ -3,6 +3,8 @@ package com.andwari.event.pagecontroller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.player.entity.Player;
@@ -40,6 +42,7 @@ public class EventPlayerSelectionController {
 	@FXML
 	private Button btnStartEvent;
 
+	@Inject
 	private TabPlayerService tabPlayerService;
 
 	@FXML
@@ -57,7 +60,6 @@ public class EventPlayerSelectionController {
 
 	@FXML
 	public void initialize() {
-		tabPlayerService = new TabPlayerService();
 			
 		setupColumnsPlayer();
 		setupColumnsPlayerEvent();

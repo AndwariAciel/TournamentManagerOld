@@ -1,5 +1,9 @@
 package com.andwari.main;
 
+import java.net.URL;
+
+import javax.inject.Inject;
+
 import com.andwari.event.pagecontroller.EventPlayerSelectionController;
 
 import javafx.fxml.FXMLLoader;
@@ -9,14 +13,17 @@ import javafx.stage.Stage;
 
 public class TabEventController {
 	
+	@Inject 
+	private FXMLLoader loader;
+	
 	public void createNewEvent() {
 		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("../event/EventPlayerSelection.fxml"));
-			BorderPane root = (BorderPane) loader.load();
+			URL fxmlRes = getClass().getResource("../event/EventPlayerSelection.fxml");
+			loader.setLocation(fxmlRes);
+			BorderPane root = loader.load();
 			Scene scene = new Scene(root);
-			
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("../startup/application.css").toExternalForm());
 			Stage newWindow = new Stage();
 			newWindow.setScene(scene);
 			EventPlayerSelectionController controller = loader.getController();

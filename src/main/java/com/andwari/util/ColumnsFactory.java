@@ -3,7 +3,7 @@ package com.andwari.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.andwari.main.player.PlayerDVO;
+import com.andwari.playermanagement.PlayerDVO;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;

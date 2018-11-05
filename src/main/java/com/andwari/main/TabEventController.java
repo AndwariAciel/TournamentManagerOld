@@ -4,7 +4,7 @@ import java.net.URL;
 
 import javax.inject.Inject;
 
-import com.andwari.event.pagecontroller.EventPlayerSelectionController;
+import com.andwari.event.playerselection.PlayerSelectionController;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,7 +26,7 @@ public class TabEventController {
 			scene.getStylesheets().add(getClass().getResource("../startup/application.css").toExternalForm());
 			Stage newWindow = new Stage();
 			newWindow.setScene(scene);
-			EventPlayerSelectionController controller = loader.getController();
+			PlayerSelectionController controller = loader.getController();
 			controller.setStage(newWindow);
 			newWindow.show();
 		} catch (Exception e) {

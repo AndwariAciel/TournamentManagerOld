@@ -1,4 +1,4 @@
-package com.andwari.main.player;
+package com.andwari.playermanagement;
 
 import java.util.ArrayList;
 import java.util.List;

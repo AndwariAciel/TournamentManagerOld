@@ -1,8 +1,10 @@
-package com.andwari.main.player;
+package com.andwari.main;
 
 import javax.inject.Inject;
 
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
+import com.andwari.playermanagement.PlayerDVO;
+import com.andwari.playermanagement.TabPlayerService;
 import com.andwari.util.ColumnsFactory;
 
 import javafx.collections.FXCollections;

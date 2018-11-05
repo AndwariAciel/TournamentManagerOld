@@ -1,4 +1,4 @@
-package com.andwari.main.player;
+package com.andwari.playermanagement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,10 +15,6 @@ public class TabPlayerService {
 	@Inject
 	private PlayerService playerService;
 	
-	public TabPlayerService() {
-		System.out.println();
-	}
-
 	public Collection<PlayerDVO> getAllPlayersFromDatabase() {
 		ArrayList<PlayerDVO> players = new ArrayList<>();
 		for (Player p : playerService.getListOfAllPlayers()) {

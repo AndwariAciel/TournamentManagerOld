@@ -1,4 +1,4 @@
-package com.andwari.main.player;
+package com.andwari.playermanagement;
 
 import javafx.beans.property.SimpleStringProperty;
 

@@ -1,4 +1,4 @@
-package com.andwari.event.pagecontroller;
+package com.andwari.event.playerselection;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,9 +9,9 @@ import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.player.entity.Player;
 import com.andwari.event.seatings.SeatingsPageController;
-import com.andwari.main.player.PlayerConverter;
-import com.andwari.main.player.PlayerDVO;
-import com.andwari.main.player.TabPlayerService;
+import com.andwari.playermanagement.PlayerConverter;
+import com.andwari.playermanagement.PlayerDVO;
+import com.andwari.playermanagement.TabPlayerService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class EventPlayerSelectionController {
+public class PlayerSelectionController {
 
 	@FXML
 	private TableView<PlayerDVO> tvPlayers;

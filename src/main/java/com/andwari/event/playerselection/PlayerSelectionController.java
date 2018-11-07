@@ -1,6 +1,7 @@
 package com.andwari.event.playerselection;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,6 +45,9 @@ public class PlayerSelectionController {
 
 	@Inject
 	private TabPlayerService tabPlayerService;
+	
+	@Inject
+	private PlayerConverter converter;
 
 	@FXML
 	private TextField tfSearchPlayer;
@@ -57,6 +61,9 @@ public class PlayerSelectionController {
 	private final String lblPlayersText = " Players in Event";	
 	
 	private Stage stage;
+	
+	@Inject
+	private FXMLLoader fxmlLoader;
 
 	@FXML
 	public void initialize() {
@@ -164,13 +171,14 @@ public class PlayerSelectionController {
 	}
 	
 	public void startEvent() {
-		List<Player> players = PlayerConverter.convertBackToPlayer(listOfPlayersInEvent);
+		List<Player> players = converter.convertBackToPlayer(listOfPlayersInEvent);
 		Event event = EventService.createNewEvent(players);
 		
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("../EventSeatings.fxml"));
-			BorderPane root = (BorderPane) loader.load();
-			SeatingsPageController controller = loader.getController();
+			URL fxmlRes = getClass().getResource("../EventSeatings.fxml");
+			fxmlLoader.setLocation(fxmlRes);
+			BorderPane root = (BorderPane) fxmlLoader.load();
+			SeatingsPageController controller = fxmlLoader.getController();
 			controller.setEvent(event);
 			controller.init();
 			

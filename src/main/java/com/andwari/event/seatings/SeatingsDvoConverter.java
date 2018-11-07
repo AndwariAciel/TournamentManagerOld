@@ -4,7 +4,7 @@ import com.andwari.core.tournamentcore.player.entity.Player;
 
 public class SeatingsDvoConverter {
 
-	public static SeatingsDvo convertToDto(Player p, int seatingNumber) {
+	public SeatingsDvo convertToDto(Player p, int seatingNumber) {
 		SeatingsDvo dvo = new SeatingsDvo();
 		dvo.setPlayerName(p.getPlayerName());
 		dvo.setSeatingNumber(String.valueOf(seatingNumber));

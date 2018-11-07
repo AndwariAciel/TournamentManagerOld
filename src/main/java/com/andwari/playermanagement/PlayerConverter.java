@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 
 public class PlayerConverter {
 
-	public static List<Player> convertBackToPlayer(ObservableList<PlayerDVO> listOfDVOs) {
+	public List<Player> convertBackToPlayer(ObservableList<PlayerDVO> listOfDVOs) {
 		List<Player> players = new ArrayList<>();
 		for(PlayerDVO dvo : listOfDVOs) {
 			players.add(convert(dvo));
@@ -18,7 +18,7 @@ public class PlayerConverter {
 		return players;
 	}
 
-	private static Player convert(PlayerDVO dvo) {
+	private Player convert(PlayerDVO dvo) {
 		Player p = new Player();
 		p.setId(Long.parseLong(dvo.getId()));
 		p.setPlayerName(dvo.getName());

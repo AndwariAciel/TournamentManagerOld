@@ -13,7 +13,7 @@ import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
 public class TabPlayerService {
 
 	@Inject
-	private PlayerService playerService;
+	private PlayerService playerService;	
 	
 	public Collection<PlayerDVO> getAllPlayersFromDatabase() {
 		ArrayList<PlayerDVO> players = new ArrayList<>();

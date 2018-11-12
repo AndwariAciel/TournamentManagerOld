@@ -180,6 +180,7 @@ public class PlayerSelectionController {
 			BorderPane root = (BorderPane) fxmlLoader.load();
 			SeatingsPageController controller = fxmlLoader.getController();
 			controller.setEvent(event);
+			controller.setStage(stage);
 			controller.init();
 			
 			stage.getScene().setRoot(root);

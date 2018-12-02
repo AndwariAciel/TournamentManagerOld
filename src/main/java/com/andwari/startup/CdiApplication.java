@@ -9,6 +9,7 @@ import com.andwari.core.tournamentcore.matches.MatchFactory;
 import com.andwari.core.tournamentcore.matches.MatchRepository;
 import com.andwari.core.tournamentcore.matches.MatchService;
 import com.andwari.core.tournamentcore.matches.MatchValidator;
+import com.andwari.core.tournamentcore.matchmaking.MatchMaker;
 import com.andwari.core.tournamentcore.matchresult.MatchResultRepository;
 import com.andwari.core.tournamentcore.matchresult.MatchResultService;
 import com.andwari.core.tournamentcore.player.boundary.PlayerService;
@@ -54,7 +55,7 @@ public class CdiApplication extends Application {
 						MatchFactory.class, PlayerController.class, PlayerRepository.class, PlayerService.class,
 						MatchService.class, StandingsService.class, StandingsCalculator.class, MatchValidator.class,
 						EventService.class, MatchResultService.class, RoundService.class, RoundRepository.class,
-						MatchRepository.class, MatchResultRepository.class)
+						MatchRepository.class, MatchResultRepository.class, MatchMaker.class)
 				.initialize();
 		container.getBeanManager().fireEvent(primaryStage, new AnnotationLiteral<StartupScene>() {
 		});

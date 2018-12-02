@@ -9,6 +9,7 @@ import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.event.entity.Match;
 import com.andwari.core.tournamentcore.event.entity.Round;
 import com.andwari.core.tournamentcore.event.entity.Standing;
+import com.andwari.core.tournamentcore.rounds.RoundService;
 import com.andwari.core.tournamentcore.standings.StandingsService;
 import com.andwari.event.matches.converter.MatchDvoConverter;
 import com.andwari.event.matches.dvos.MatchListDvo;
@@ -25,6 +26,9 @@ public class MatchesPageService {
 
 	@Inject
 	private RankingsDvoConverter rankingsConverter;
+
+	@Inject
+	private RoundService roundService;
 	
 	public List<MatchListDvo> getListOfDvos(Round round) {
 		List<MatchListDvo> listOfDvos = new ArrayList<>();
@@ -35,7 +39,7 @@ public class MatchesPageService {
 	}
 
 	public ArrayList<RankingsDvo> getRankings(Event event) {
-		ArrayList<Standing> orderdStandings = standingService.getRankings(event);
+		ArrayList<Standing> orderdStandings = standingService.getRankings(event.getRankings());
 		ArrayList<RankingsDvo> orderedDvos = new ArrayList<>();
 		int rank = 1;
 		for(Standing standing : orderdStandings) {
@@ -46,5 +50,15 @@ public class MatchesPageService {
 			
 		}
 		return orderedDvos;
+	}
+
+	public boolean validateRound(Round round) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public Round createNextRound(Event event) {
+		Round round = roundService.getNextRound(event);
+		return round;
 	}
 }

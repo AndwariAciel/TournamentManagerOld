@@ -5,10 +5,8 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.event.entity.Match;
 import com.andwari.core.tournamentcore.event.entity.Round;
-import com.andwari.core.tournamentcore.event.entity.Standing;
 import com.andwari.event.matches.control.MatchListCallback;
 import com.andwari.event.matches.control.MatchesPageService;
 import com.andwari.event.matches.dvos.MatchListDvo;
@@ -19,8 +17,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 
 public class MatchesPageController implements Serializable {
@@ -33,13 +31,12 @@ public class MatchesPageController implements Serializable {
 	private ObservableList<MatchListDvo> listOfMatches;
 	
 	@FXML
-	private ListView<RankingsDvo> listViewOfRankings;
+	private TableView<RankingsDvo> listViewOfRankings;
 	private ObservableList<RankingsDvo> listOfRankings;
 	
 	@FXML
-	private TableColumn<RankingsDvo, String> tcRank, tcPlayer, tcScore, tcOpScore;
+	private TableColumn<RankingsDvo, String> tcStandingRank, tcStandingPlayer, tcStandingScore;
 	
-
 	@FXML
 	private MatchViewController matchViewController;
 
@@ -58,7 +55,7 @@ public class MatchesPageController implements Serializable {
 		this.round = round;
 		listOfMatches = FXCollections.observableArrayList(pageService.getListOfDvos(this.round));
 		listViewOfMatches.setCellFactory(callback);
-
+		
 		listViewOfMatches.setItems(listOfMatches);
 		MatchListDvo match = listOfMatches.stream().findFirst().get();
 		matchViewController.init(this, this.round);
@@ -78,7 +75,6 @@ public class MatchesPageController implements Serializable {
 
 
 	public void updateMatch(Match match, MatchListDvo dvo) {
-		Event event = round.getEvent();	
 		int index = listOfMatches.indexOf(dvo);
 		listOfMatches.remove(index);
 		if(match.isFinished()) {
@@ -89,21 +85,37 @@ public class MatchesPageController implements Serializable {
 			listOfMatches.add(0, dvo);
 			listViewOfMatches.getSelectionModel().clearAndSelect(0);
 		}
-		
-		
-		System.out.println("---------");
-//		for (Standing standing : event.getRankings()) {
-//			System.out.println(standing.getPlayer().getPlayerName() + ": " + standing.getScore() + " with "
-//					+ standing.getOpponentMatchWinPercentage() + " Opscore");
-//		}
-		initRankingList();
+
+		updateRankingList();
 	}
 
 	private void initRankingList() {
-		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());	
+		listOfRankings = FXCollections.observableArrayList();
+		listViewOfRankings.setItems(listOfRankings);
 		
-		for(RankingsDvo r : rankings) {
-			System.out.println(r.getPlayer() + " - " + r.getScore() + " - " + r.getOpGamesScore() + " - " + r.getMatchScore() + " - " + r.getOpMatchScore());
+		tcStandingRank.setCellValueFactory(cellData -> cellData.getValue().getRankProperty());
+		tcStandingPlayer.setCellValueFactory(cellData -> cellData.getValue().getPlayerProperty());
+		tcStandingScore.setCellValueFactory(cellData -> cellData.getValue().getScoreStringProperty());
+		
+		tcStandingRank.setSortable(false);
+		tcStandingPlayer.setSortable(false);
+		tcStandingScore.setSortable(false);
+		
+		updateRankingList();
+	}
+	
+	private void updateRankingList() {
+		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());	
+		listOfRankings.clear();
+		listOfRankings.addAll(rankings);
+		
+	}
+	
+	public void finishRound() {
+		if(!pageService.validateRound(round)) {
+			//TODO error message
 		}
+		Round nextRound = pageService.createNextRound(round.getEvent());		
+		initialize(nextRound);
 	}
 }

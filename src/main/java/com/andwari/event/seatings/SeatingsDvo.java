@@ -2,7 +2,7 @@ package com.andwari.event.seatings;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class SeatingsDvo {
+class SeatingsDvo {
 
 	private SimpleStringProperty seatingNumber = new SimpleStringProperty();
 	

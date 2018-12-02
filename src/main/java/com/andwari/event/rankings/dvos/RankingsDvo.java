@@ -12,6 +12,8 @@ public class RankingsDvo {
 	
 	private SimpleStringProperty score;
 	
+	private SimpleStringProperty scoreString;
+	
 	private SimpleStringProperty opGamesScore;
 	
 	private SimpleStringProperty matchScore;
@@ -97,4 +99,18 @@ public class RankingsDvo {
 	public void setStandingId(Long standingId) {
 		this.standingId = standingId;
 	}
+
+	public String getScoreString() {
+		return scoreString.get();
+	}
+	
+	public void setScoreString(String scoreString) {
+		this.scoreString = new SimpleStringProperty(scoreString);
+	}
+
+	public SimpleStringProperty getScoreStringProperty() {
+		return scoreString;
+	}
+
+
 }

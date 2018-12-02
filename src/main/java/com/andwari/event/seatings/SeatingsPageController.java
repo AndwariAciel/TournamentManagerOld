@@ -75,7 +75,6 @@ public class SeatingsPageController {
 	
 	public void startFirstRound() {
 		Round round1 = matchFactory.createCrosspairings(event);
-		round1.setEvent(event);
 		event.getRounds().add(round1);
 		//TODO save event
 		

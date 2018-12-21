@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.andwari.core.tournamentcore.event.EventRepository;
 import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.event.entity.Round;
@@ -39,6 +40,9 @@ public class SeatingsPageController {
 	@Inject 
 	private FXMLLoader fxmlLoader;
 	
+	@Inject
+	private EventService eventService;
+	
 	private Stage stage;
 	
 	@Inject
@@ -47,14 +51,16 @@ public class SeatingsPageController {
 	@Inject 
 	private SeatingsDvoConverter converter;
 	
+	@Inject
+	private EventRepository eventRepos;
+	
 	public void setEvent(Event event) {
 		this.event = event;
 	}
 	
 	public void init() {		
 		listOfSeatings = FXCollections.observableArrayList();
-		List<Player> seatings = EventService.createSeatings(event);
-		event.setSeatings(seatings);
+		List<Player> seatings = eventService.createSeatings(event);
 		for(int x = 1; x <= seatings.size(); x++) {
 			listOfSeatings.add(converter.convertToDto(seatings.get(x-1), x));
 		}
@@ -76,8 +82,7 @@ public class SeatingsPageController {
 	public void startFirstRound() {
 		Round round1 = matchFactory.createCrosspairings(event);
 		event.getRounds().add(round1);
-		//TODO save event
-		
+		eventRepos.update(event);
 		
 		try {
 			URL fxmlRes = getClass().getResource("../matches/EventMatches.fxml");

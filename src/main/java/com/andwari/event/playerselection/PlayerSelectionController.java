@@ -64,6 +64,9 @@ public class PlayerSelectionController {
 	
 	@Inject
 	private FXMLLoader fxmlLoader;
+	
+	@Inject
+	private EventService eventService;
 
 	@FXML
 	public void initialize() {
@@ -172,7 +175,7 @@ public class PlayerSelectionController {
 	
 	public void startEvent() {
 		List<Player> players = converter.convertBackToPlayer(listOfPlayersInEvent);
-		Event event = EventService.createNewEvent(players);
+		Event event = eventService.createNewEvent(players);
 		
 		try {
 			URL fxmlRes = getClass().getResource("../EventSeatings.fxml");

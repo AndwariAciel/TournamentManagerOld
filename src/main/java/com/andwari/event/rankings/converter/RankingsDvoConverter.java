@@ -5,13 +5,13 @@ import java.math.RoundingMode;
 import javax.inject.Inject;
 
 import com.andwari.core.tournamentcore.event.entity.Standing;
-import com.andwari.core.tournamentcore.standings.StandingsService;
+import com.andwari.core.tournamentcore.standings.StandingService;
 import com.andwari.event.rankings.dvos.RankingsDvo;
 
 public class RankingsDvoConverter {
 	
 	@Inject
-	private StandingsService standingService;
+	private StandingService standingService;
 
 	public RankingsDvo convertToDvo(Standing standing) {
 		RankingsDvo dvo = new RankingsDvo();

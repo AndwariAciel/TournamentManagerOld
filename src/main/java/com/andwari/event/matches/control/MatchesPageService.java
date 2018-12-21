@@ -10,7 +10,7 @@ import com.andwari.core.tournamentcore.event.entity.Match;
 import com.andwari.core.tournamentcore.event.entity.Round;
 import com.andwari.core.tournamentcore.event.entity.Standing;
 import com.andwari.core.tournamentcore.rounds.RoundService;
-import com.andwari.core.tournamentcore.standings.StandingsService;
+import com.andwari.core.tournamentcore.standings.StandingService;
 import com.andwari.event.matches.converter.MatchDvoConverter;
 import com.andwari.event.matches.dvos.MatchListDvo;
 import com.andwari.event.rankings.converter.RankingsDvoConverter;
@@ -22,7 +22,7 @@ public class MatchesPageService {
 	private MatchDvoConverter converter;
 	
 	@Inject
-	private StandingsService standingService;
+	private StandingService standingService;
 
 	@Inject
 	private RankingsDvoConverter rankingsConverter;
@@ -58,7 +58,7 @@ public class MatchesPageService {
 	}
 
 	public Round createNextRound(Event event) {
-		Round round = roundService.getNextRound(event);
-		return round;
+		Round nextRound = roundService.getNextRound(event);
+		return nextRound;
 	}
 }

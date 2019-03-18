@@ -1,11 +1,11 @@
 package com.andwari.event.seatings;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.event.EventRepository;
 import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
@@ -54,6 +54,9 @@ public class SeatingsPageController {
 	@Inject
 	private EventRepository eventRepos;
 	
+	@Inject
+	private FxmlPageManager finder;
+	
 	public void setEvent(Event event) {
 		this.event = event;
 	}
@@ -82,11 +85,11 @@ public class SeatingsPageController {
 	public void startFirstRound() {
 		Round round1 = matchFactory.createCrosspairings(event);
 		event.getRounds().add(round1);
+		event.setCurrentRound(1);
 		eventRepos.update(event);
 		
 		try {
-			URL fxmlRes = getClass().getResource("../matches/EventMatches.fxml");
-			fxmlLoader.setLocation(fxmlRes);
+			fxmlLoader.setLocation(finder.findFxmlResource("event/matches/EventMatches.fxml"));
 			BorderPane root = (BorderPane) fxmlLoader.load();
 			MatchesPageController controller = fxmlLoader.getController();
 			controller.initialize(round1);			

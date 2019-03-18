@@ -2,6 +2,8 @@ package com.andwari.main;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
+
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
 import com.andwari.playermanagement.PlayerDVO;
 import com.andwari.playermanagement.TabPlayerService;
@@ -42,7 +44,7 @@ public class TabPlayerController {
 	
 	@FXML
 	private TableView<PlayerDVO> tvListOfPlayers;
-		
+	
 	@FXML
     public void initialize() {
 		listOfPlayers = FXCollections.observableArrayList(tabPlayerService.getAllPlayersFromDatabase());		
@@ -64,6 +66,8 @@ public class TabPlayerController {
 	}
 
 	public void addPlayer() {
+		Logger logger = Logger.getLogger(this.getClass());
+		logger.info("GO");
 		lbWarning.setVisible(false);
 		String name = tfPlayername.getText();
 		String dci = tfDciNumber.getText();

@@ -5,6 +5,8 @@ import java.net.URL;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
+
 import com.andwari.event.matches.dvos.MatchListDvo;
 
 import javafx.fxml.FXML;
@@ -41,6 +43,8 @@ public class MatchListCellView extends ListCell<MatchListDvo> {
 	@Inject
 	private FXMLLoader loader;
 	
+	private Logger logger = Logger.getLogger(this.getClass().getName());
+	
 	private static final String STATUS_PLAYING = "Playing";
 	private static final String STATUS_FINISHED = "Finished";
 	private static final String DEFAULT_SCORE = "-";
@@ -63,7 +67,7 @@ public class MatchListCellView extends ListCell<MatchListDvo> {
 					loader.load();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 
 			player1.setText(matchItem.getPlayer1());

@@ -16,9 +16,15 @@ public class RankingsDvo {
 	
 	private SimpleStringProperty opGamesScore;
 	
-	private SimpleStringProperty matchScore;
+	private SimpleStringProperty gameScore;
 	
 	private SimpleStringProperty opMatchScore;
+	
+	private SimpleStringProperty rankingPoints;
+	
+	private SimpleStringProperty booster;
+	
+	private boolean dropped;
 	
 	public String getRank() {
 		return rank.get();
@@ -68,16 +74,16 @@ public class RankingsDvo {
 		return opGamesScore;
 	}
 	
-	public String getMatchScore() {
-		return matchScore.get();
+	public String getGameScore() {
+		return gameScore.get();
 	}
 	
-	public void setMatchScore(String matchScore) {
-		this.matchScore = new SimpleStringProperty(matchScore);
+	public void setGameScore(String gameScore) {
+		this.gameScore = new SimpleStringProperty(gameScore);
 	}
 	
-	public SimpleStringProperty getMatchScoreProperty() {
-		return matchScore;
+	public SimpleStringProperty getGameScoreProperty() {
+		return gameScore;
 	}
 	
 	public String getOpMatchScore() {
@@ -91,7 +97,31 @@ public class RankingsDvo {
 	public SimpleStringProperty getOpMatchScoreProperty() {
 		return opMatchScore;
 	}
+	
+	public String getRankingPoints() {
+		return rankingPoints.get();
+	}
+	
+	public void setRankingPoints(String rankingPoints) {
+		this.rankingPoints = new SimpleStringProperty(rankingPoints);
+	}
+	
+	public SimpleStringProperty getRankingPointsProperty() {
+		return rankingPoints;
+	}
 
+	public String getBooster() {
+		return booster.get();
+	}
+	
+	public void setBooster(String booster) {
+		this.booster= new SimpleStringProperty(booster);
+	}
+	
+	public SimpleStringProperty getBoosterProperty() {
+		return booster;
+	}
+	
 	public Long getStandingId() {
 		return standingId;
 	}
@@ -110,6 +140,14 @@ public class RankingsDvo {
 
 	public SimpleStringProperty getScoreStringProperty() {
 		return scoreString;
+	}
+
+	public boolean isDropped() {
+		return dropped;
+	}
+
+	public void setDropped(boolean dropped) {
+		this.dropped = dropped;
 	}
 
 

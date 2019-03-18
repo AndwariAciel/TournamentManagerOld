@@ -4,12 +4,13 @@ import java.math.RoundingMode;
 
 import javax.inject.Inject;
 
+import com.andwari.core.tournamentcore.event.entity.Round;
 import com.andwari.core.tournamentcore.event.entity.Standing;
 import com.andwari.core.tournamentcore.standings.StandingService;
 import com.andwari.event.rankings.dvos.RankingsDvo;
 
 public class RankingsDvoConverter {
-	
+
 	@Inject
 	private StandingService standingService;
 
@@ -19,10 +20,16 @@ public class RankingsDvoConverter {
 		dvo.setScore(Integer.toString(standing.getScore()));
 		dvo.setOpGamesScorer(standing.getOpponentGameWinPercentage().setScale(4, RoundingMode.HALF_UP).toPlainString());
 		dvo.setOpMatchScore(standing.getOpponentMatchWinPercentage().setScale(4, RoundingMode.HALF_UP).toPlainString());
-		dvo.setMatchScore(standing.getMatchWinPercentage().setScale(4, RoundingMode.HALF_UP).toPlainString());
+		dvo.setGameScore(standing.getGameWinPercentage().setScale(4, RoundingMode.HALF_UP).toPlainString());
 		dvo.setScoreString(standingService.getScoreString(standing));
 		dvo.setStandingId(standing.getId());
+		dvo.setDropped(standing.getDropped());
 		return dvo;
 	}
-	
+
+	public Standing convertToEntity(RankingsDvo dvo, Round round) {
+		return round.getEvent().getRankings().stream().filter(standing -> standing.getId() == dvo.getStandingId())
+				.findFirst().get();
+	}
+
 }

@@ -3,23 +3,34 @@ package com.andwari.event.matches;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.event.entity.Match;
 import com.andwari.core.tournamentcore.event.entity.Round;
 import com.andwari.event.matches.control.MatchListCallback;
 import com.andwari.event.matches.control.MatchesPageService;
 import com.andwari.event.matches.dvos.MatchListDvo;
 import com.andwari.event.rankings.dvos.RankingsDvo;
+import com.andwari.event.standingoverview.StandingFinalOverviewController;
+import com.andwari.event.standingoverview.StandingOverviewController;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class MatchesPageController implements Serializable {
 
@@ -35,10 +46,17 @@ public class MatchesPageController implements Serializable {
 	private ObservableList<RankingsDvo> listOfRankings;
 	
 	@FXML
-	private TableColumn<RankingsDvo, String> tcStandingRank, tcStandingPlayer, tcStandingScore;
+	private TableColumn<RankingsDvo, String> tcStandingRank, tcStandingPlayer, tcStandingScore, tcStandingPoints;
 	
 	@FXML
 	private MatchViewController matchViewController;
+	
+	@FXML
+	private Label lbRound;
+	private static final String lbRoundText = "Matches - Round ";
+	
+	@FXML
+	private Button btnPrev, btnNext, btnFinish, btnFinishEvent;
 
 	private Round round;
 
@@ -50,6 +68,12 @@ public class MatchesPageController implements Serializable {
 
 	@FXML
 	private Label lbBye;
+
+	@Inject
+	private Instance<FXMLLoader> instanceOfLoader;
+	
+	@Inject
+	private FxmlPageManager finder;
 
 	public void initialize(Round round) {
 		this.round = round;
@@ -70,7 +94,36 @@ public class MatchesPageController implements Serializable {
 			matchViewController.updateMatch(listViewOfMatches.getSelectionModel().getSelectedItem());
 		});
 		
+		handleHeader();
+		
 		initRankingList();
+	}
+
+
+	private void handleHeader() {
+		int roundNumber = round.getEvent().getCurrentRound();
+		lbRound.setText(lbRoundText + roundNumber);
+		if(roundNumber > 1) {
+			btnPrev.setDisable(false);
+		} else {
+			btnPrev.setDisable(true);
+		}
+		if(roundNumber < round.getEvent().getRounds().size()) {
+			btnNext.setDisable(false);
+		} else {
+			btnNext.setDisable(true);
+		}
+		if(round.getFinished()) {
+			btnFinish.setDisable(true);
+		} else {
+			btnFinish.setDisable(false);
+		}
+		if(round.getEvent().getMaxNumberOfRounds() == roundNumber) {
+			btnFinish.setDisable(true);
+			btnFinishEvent.setVisible(true);
+		} else {
+			btnFinishEvent.setVisible(false);
+		}
 	}
 
 
@@ -96,10 +149,12 @@ public class MatchesPageController implements Serializable {
 		tcStandingRank.setCellValueFactory(cellData -> cellData.getValue().getRankProperty());
 		tcStandingPlayer.setCellValueFactory(cellData -> cellData.getValue().getPlayerProperty());
 		tcStandingScore.setCellValueFactory(cellData -> cellData.getValue().getScoreStringProperty());
+		tcStandingPoints.setCellValueFactory(cellData -> cellData.getValue().getScoreProperty());
 		
 		tcStandingRank.setSortable(false);
 		tcStandingPlayer.setSortable(false);
 		tcStandingScore.setSortable(false);
+		tcStandingPoints.setSortable(false);
 		
 		updateRankingList();
 	}
@@ -111,11 +166,97 @@ public class MatchesPageController implements Serializable {
 		
 	}
 	
-	public void finishRound() {
+	public void finishRound() {		
 		if(!pageService.validateRound(round)) {
-			//TODO error message
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("unfinished Matches");
+			alert.setHeaderText("Warning");
+			alert.setContentText("Cannot go to next round, not all matches are finished!");
+			alert.showAndWait();
+			return;
 		}
+		showAndWaitDetails();
+		round.setFinished(true);
 		Round nextRound = pageService.createNextRound(round.getEvent());		
 		initialize(nextRound);
+	}
+	
+	public void goToPreviousRound() {
+		int currentRound = round.getEvent().getCurrentRound();
+		if(currentRound > 1) {
+			currentRound--;
+			round.getEvent().setCurrentRound(currentRound);
+			Round prevRound = ((ArrayList<Round>) round.getEvent().getRounds()).get(currentRound - 1);
+			initialize(prevRound);
+		}
+	}
+	
+	public void goToNextRound() {
+		
+		int currentRound = round.getEvent().getCurrentRound();
+		if(currentRound - 1 < round.getEvent().getRounds().size()) {
+			currentRound++;
+			round.getEvent().setCurrentRound(currentRound);
+			Round prevRound = ((ArrayList<Round>) round.getEvent().getRounds()).get(currentRound - 1);
+			initialize(prevRound);
+		}
+	}
+	
+	public void showDetails() {
+		try {
+			FXMLLoader loader = instanceOfLoader.get();
+			loader.setLocation(finder.findFxmlResource("event/StandingOverview.fxml"));
+			BorderPane root = loader.load();
+			Scene scene = new Scene(root);
+			Stage newWindow = new Stage();
+			newWindow.setScene(scene);
+			StandingOverviewController controller = loader.getController();
+			newWindow.show();
+			controller.initialize(round);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void showAndWaitDetails() {
+		try {
+			FXMLLoader loader = instanceOfLoader.get();
+			loader.setLocation(finder.findFxmlResource("event/StandingOverview.fxml"));
+			BorderPane root = loader.load();
+			Scene scene = new Scene(root);
+			Stage newWindow = new Stage();
+			newWindow.setScene(scene);
+			StandingOverviewController controller = loader.getController();
+			controller.initialize(round);
+			newWindow.showAndWait();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void finishEvent() {
+		if(!pageService.validateRound(round)) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("unfinished Matches");
+			alert.setHeaderText("Warning");
+			alert.setContentText("Cannot finish the event, not all matches are finished!");
+			alert.showAndWait();
+			return;
+		}
+		round.setFinished(true);
+		initialize(round);
+		try {
+			FXMLLoader loader = instanceOfLoader.get();
+			loader.setLocation(finder.findFxmlResource("event/StandingFinalOverview.fxml"));
+			BorderPane root = loader.load();
+			Scene scene = new Scene(root);
+			Stage newWindow = new Stage();
+			newWindow.setScene(scene);
+			StandingFinalOverviewController controller = loader.getController();
+			newWindow.show();
+			controller.initialize(round);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

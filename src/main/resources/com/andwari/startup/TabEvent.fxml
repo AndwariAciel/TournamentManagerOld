@@ -14,7 +14,7 @@
 	xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="com.andwari.main.TabEventController">
 	<center>
-		<Button mnemonicParsing="false" text="Start new Event"
+		<Button mnemonicParsing="false" text="Start new Event" fx:id="startEventBtn"
 			BorderPane.alignment="CENTER" onAction="#createNewEvent" />
 	</center>
 </BorderPane>

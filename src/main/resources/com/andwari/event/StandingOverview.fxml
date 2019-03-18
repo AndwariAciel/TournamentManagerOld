@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andwari.event.standingoverview.StandingOverviewController">
+   <top>
+      <Label text="Standings" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   <center>
+      <TableView fx:id="tableStandings" maxWidth="600.0" prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="colRank" prefWidth="60.0" text="Rank" />
+          <TableColumn fx:id="colPlayer" prefWidth="180.0" text="Player" />
+            <TableColumn fx:id="colScore" prefWidth="90.0" text="Score" />
+            <TableColumn fx:id="colOpscore" prefWidth="90.0" text="OpScore" />
+            <TableColumn fx:id="colGamescroe" prefWidth="90.0" text="GameScore" />
+            <TableColumn fx:id="colOpGamescore" prefWidth="90.0" text="OpGameScore" />
+        </columns>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </TableView>
+   </center>
+   <bottom>
+      <Button fx:id="btnOk" mnemonicParsing="false" text="Ok" BorderPane.alignment="CENTER" onAction="#closeWindow">
+         <BorderPane.margin>
+            <Insets bottom="20.0" />
+         </BorderPane.margin>
+      </Button>
+   </bottom>
+   <right>
+      <Button fx:id="btnDrop" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Drop player" BorderPane.alignment="CENTER" onAction="#dropPlayer">
+         <BorderPane.margin>
+            <Insets right="20.0" />
+         </BorderPane.margin>
+      </Button>
+   </right>
+</BorderPane>

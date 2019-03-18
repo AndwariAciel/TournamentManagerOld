@@ -12,12 +12,12 @@
 	<top>
 		<FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 			<children>
-				<Button mnemonicParsing="false" text="previous round">
+				<Button fx:id="btnPrev" mnemonicParsing="false" onAction="#goToPreviousRound" text="previous round">
 					<FlowPane.margin>
 						<Insets />
 					</FlowPane.margin>
 				</Button>
-				<Label text="Matches - Round 1" textAlignment="CENTER">
+				<Label fx:id="lbRound" text="Matches - Round 1" textAlignment="CENTER">
 					<FlowPane.margin>
 						<Insets left="200.0" right="200.0" />
 					</FlowPane.margin>
@@ -25,7 +25,7 @@
 						<Font size="18.0" />
 					</font>
 				</Label>
-				<Button disable="true" mnemonicParsing="false" text="next round" />
+				<Button fx:id="btnNext" disable="true" mnemonicParsing="false" onAction="#goToNextRound" text="next round" />
 			</children>
 		</FlowPane>
 	</top>
@@ -35,11 +35,22 @@
 				<fx:include fx:id="matchView" source="MatchView.fxml" />
 			</center>
          <right>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#finishRound" text="Finish Round" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="btnFinish" alignment="CENTER" mnemonicParsing="false" onAction="#finishRound" text="Finish Round">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="btnFinishEvent" mnemonicParsing="false" onAction="#finishEvent" text="Finish Event" />
+               </children>
                <BorderPane.margin>
-                  <Insets right="40.0" />
+                  <Insets right="60.0" />
                </BorderPane.margin>
-            </Button>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
          </right>
 		</BorderPane>
 	</bottom>
@@ -48,12 +59,13 @@
 			<children>
 				<TableView fx:id="listViewOfRankings" prefHeight="350.0" prefWidth="350.0">
 					<columns>
-						<TableColumn fx:id="tcStandingRank" prefWidth="40.0" text="#" />
-						<TableColumn fx:id="tcStandingPlayer" prefWidth="230.0" text="Player" />
-						<TableColumn fx:id="tcStandingScore" text="Score" />
+						<TableColumn fx:id="tcStandingRank" prefWidth="30.0" text="#" />
+						<TableColumn fx:id="tcStandingPlayer" minWidth="200.0" prefWidth="225.0" text="Player" />
+						<TableColumn fx:id="tcStandingScore" prefWidth="60.0" text="Games" />
+                  <TableColumn fx:id="tcStandingPoints" prefWidth="30.0" text="Pts" />
 					</columns>
 				</TableView>
-				<Button mnemonicParsing="false" text="Details">
+				<Button mnemonicParsing="false" onAction="#showDetails" text="Details / Drop Player">
 					<FlowPane.margin>
 						<Insets top="10.0" />
 					</FlowPane.margin>

@@ -29,6 +29,7 @@ public class MatchesPageService {
 
 	@Inject
 	private RoundService roundService;
+
 	
 	public List<MatchListDvo> getListOfDvos(Round round) {
 		List<MatchListDvo> listOfDvos = new ArrayList<>();
@@ -53,12 +54,15 @@ public class MatchesPageService {
 	}
 
 	public boolean validateRound(Round round) {
-		// TODO Auto-generated method stub
-		return false;
+		return roundService.checkIfFinished(round);
 	}
 
 	public Round createNextRound(Event event) {
-		Round nextRound = roundService.getNextRound(event);
-		return nextRound;
+		return roundService.getNextRound(event);
 	}
+
+	public void dropPlayer(Standing standing) {
+		standingService.dropPlayer(standing);		
+	}
+	
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0"
+	prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.andwari.event.matches.MatchViewController">
+	<children>
+		<FlowPane fx:id="fpPlayer1" alignment="CENTER"
+			columnHalignment="CENTER" maxHeight="100.0" maxWidth="200.0"
+			prefHeight="50.0" prefWidth="200.0">
+			<children>
+				<Label fx:id="lbPlayer1" text="Player1">
+					<font>
+						<Font size="24.0" />
+					</font>
+				</Label>
+			</children>
+		</FlowPane>
+		<FlowPane fx:id="fpScore1" alignment="CENTER"
+			maxHeight="100.0" prefWidth="50.0">
+			<children>
+				<Label fx:id="lbScore1" text="0">
+					<font>
+						<Font size="36.0" />
+					</font>
+				</Label>
+			</children>
+		</FlowPane>
+		<Button fx:id="submitButton" mnemonicParsing="false" onAction="#submitMatch"
+			text="Submit" />
+		<FlowPane fx:id="fpScore2" alignment="CENTER"
+			maxHeight="100.0" prefWidth="50.0">
+			<children>
+				<Label fx:id="lbScore2" text="0">
+					<font>
+						<Font size="36.0" />
+					</font>
+				</Label>
+			</children>
+		</FlowPane>
+		<FlowPane fx:id="fpPlayer2" alignment="CENTER"
+			columnHalignment="CENTER" maxHeight="100.0" maxWidth="200.0"
+			prefHeight="50.0" prefWidth="200.0">
+			<children>
+				<Label fx:id="lbPlayer2" text="Player2">
+					<font>
+						<Font size="24.0" />
+					</font>
+				</Label>
+			</children>
+		</FlowPane>
+	</children>
+</HBox>

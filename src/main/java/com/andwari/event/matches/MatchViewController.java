@@ -16,30 +16,30 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 
 public class MatchViewController {
-	
+
 	private MatchListDvo match;
-	
+
 	@FXML
 	private Label lbPlayer1, lbPlayer2, lbScore1, lbScore2, lbStatus;
-	
+
 	@FXML
 	private FlowPane fpPlayer1, fpPlayer2, fpScore1, fpScore2;
-	
-	@FXML 
+
+	@FXML
 	private Button submitButton;
-	
+
 	@Inject
 	private MatchDvoConverter converter;
-	
+
 	@Inject
 	private MatchService matchService;
-	
+
 	private Round round;
 	private MatchesPageController matchesPageController;
-	
+
 	private static final String BUTTON_SUBMIT = "submit";
 	private static final String BUTTON_REVOKE = "revoke";
-	
+
 	@FXML
 	public void initialize() {
 		fpPlayer1.setOnMouseClicked((MouseEvent event) -> {
@@ -55,23 +55,27 @@ public class MatchViewController {
 			updateScore2(event);
 		});
 	}
-	
+
 	private void updateScore1(MouseEvent event) {
-		if(event.getButton().equals(MouseButton.PRIMARY) && match.getWinsPlayer1() <2) {
+		if (event.getButton().equals(MouseButton.PRIMARY) && match.getWinsPlayer1() < 2 && checkScore()) {
 			match.setWinsPlayer1(match.getWinsPlayer1() + 1);
 		} else if (event.getButton().equals(MouseButton.SECONDARY) && match.getWinsPlayer1() > 0) {
 			match.setWinsPlayer1(match.getWinsPlayer1() - 1);
 		}
 		lbScore1.setText(Integer.toString(match.getWinsPlayer1()));
 	}
-	
+
 	private void updateScore2(MouseEvent event) {
-		if(event.getButton().equals(MouseButton.PRIMARY) && match.getWinsPlayer2() <2) {
+		if (event.getButton().equals(MouseButton.PRIMARY) && match.getWinsPlayer2() < 2 && checkScore()) {
 			match.setWinsPlayer2(match.getWinsPlayer2() + 1);
 		} else if (event.getButton().equals(MouseButton.SECONDARY) && match.getWinsPlayer2() > 0) {
 			match.setWinsPlayer2(match.getWinsPlayer2() - 1);
 		}
 		lbScore2.setText(Integer.toString(match.getWinsPlayer2()));
+	}
+
+	private boolean checkScore() {
+		return match.getWinsPlayer1() + match.getWinsPlayer2() < 3;
 	}
 
 	protected void updateMatch(MatchListDvo match) {
@@ -80,15 +84,15 @@ public class MatchViewController {
 		lbPlayer2.setText(match.getPlayer2());
 		lbScore1.setText(Integer.toString(match.getWinsPlayer1()));
 		lbScore2.setText(Integer.toString(match.getWinsPlayer2()));
-		if(match.isFinished()) {
+		if (match.isFinished()) {
 			submitButton.setText(BUTTON_REVOKE);
 		} else {
 			submitButton.setText(BUTTON_SUBMIT);
 		}
 	}
-	
+
 	public void submitMatch() {
-		if(!match.isFinished()) {
+		if (!match.isFinished()) {
 			finishMatch();
 		} else {
 			revokeMatch();
@@ -98,18 +102,18 @@ public class MatchViewController {
 	public void init(MatchesPageController matchesPageController, Round round) {
 		this.round = round;
 		this.matchesPageController = matchesPageController;
-		if(round.getFinished()) {
+		if (round.getFinished()) {
 			submitButton.setDisable(true);
 		} else {
 			submitButton.setDisable(false);
 		}
 	}
-	
+
 	private void finishMatch() {
 		Match matchEntity = converter.convertToEntity(match, round);
 		try {
 			matchService.finishMatch(matchEntity);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -117,7 +121,7 @@ public class MatchViewController {
 		submitButton.setText(BUTTON_REVOKE);
 		matchesPageController.updateMatch(matchEntity, match);
 	}
-	
+
 	private void revokeMatch() {
 		Match matchEntity = converter.convertToEntity(match, round);
 		match.setWinsPlayer1(0);

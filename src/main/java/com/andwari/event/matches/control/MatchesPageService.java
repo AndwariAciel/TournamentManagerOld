@@ -65,4 +65,8 @@ public class MatchesPageService {
 		standingService.dropPlayer(standing);		
 	}
 	
+	public Round revokeRound(Round round) {
+		return roundService.revokeRound(round);
+	}
+	
 }

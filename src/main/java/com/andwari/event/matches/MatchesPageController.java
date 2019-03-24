@@ -2,6 +2,7 @@ package com.andwari.event.matches;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -34,29 +36,29 @@ import javafx.stage.Stage;
 
 public class MatchesPageController implements Serializable {
 
-	private static final long serialVersionUID = 4247502216462360362L; 
+	private static final long serialVersionUID = 4247502216462360362L;
 
 	@FXML
 	private ListView<MatchListDvo> listViewOfMatches;
 
 	private ObservableList<MatchListDvo> listOfMatches;
-	
+
 	@FXML
 	private TableView<RankingsDvo> listViewOfRankings;
 	private ObservableList<RankingsDvo> listOfRankings;
-	
+
 	@FXML
 	private TableColumn<RankingsDvo, String> tcStandingRank, tcStandingPlayer, tcStandingScore, tcStandingPoints;
-	
+
 	@FXML
 	private MatchViewController matchViewController;
-	
+
 	@FXML
 	private Label lbRound;
 	private static final String lbRoundText = "Matches - Round ";
-	
+
 	@FXML
-	private Button btnPrev, btnNext, btnFinish, btnFinishEvent;
+	private Button btnPrev, btnNext, btnFinish, btnFinishEvent, btnRevokeRound;
 
 	private Round round;
 
@@ -71,7 +73,7 @@ public class MatchesPageController implements Serializable {
 
 	@Inject
 	private Instance<FXMLLoader> instanceOfLoader;
-	
+
 	@Inject
 	private FxmlPageManager finder;
 
@@ -79,7 +81,7 @@ public class MatchesPageController implements Serializable {
 		this.round = round;
 		listOfMatches = FXCollections.observableArrayList(pageService.getListOfDvos(this.round));
 		listViewOfMatches.setCellFactory(callback);
-		
+
 		listViewOfMatches.setItems(listOfMatches);
 		MatchListDvo match = listOfMatches.stream().findFirst().get();
 		matchViewController.init(this, this.round);
@@ -93,44 +95,47 @@ public class MatchesPageController implements Serializable {
 		listViewOfMatches.setOnMouseClicked((MouseEvent event) -> {
 			matchViewController.updateMatch(listViewOfMatches.getSelectionModel().getSelectedItem());
 		});
-		
+
 		handleHeader();
-		
+
 		initRankingList();
 	}
-
 
 	private void handleHeader() {
 		int roundNumber = round.getEvent().getCurrentRound();
 		lbRound.setText(lbRoundText + roundNumber);
-		if(roundNumber > 1) {
+		if (roundNumber > 1) {
 			btnPrev.setDisable(false);
 		} else {
 			btnPrev.setDisable(true);
 		}
-		if(roundNumber < round.getEvent().getRounds().size()) {
+		if (roundNumber < round.getEvent().getRounds().size()) {
 			btnNext.setDisable(false);
 		} else {
 			btnNext.setDisable(true);
 		}
-		if(round.getFinished()) {
+		if (round.getFinished()) {
 			btnFinish.setDisable(true);
 		} else {
 			btnFinish.setDisable(false);
 		}
-		if(round.getEvent().getMaxNumberOfRounds() == roundNumber) {
+		if (round.getEvent().getMaxNumberOfRounds() == roundNumber) {
 			btnFinish.setDisable(true);
 			btnFinishEvent.setVisible(true);
 		} else {
 			btnFinishEvent.setVisible(false);
 		}
+		if (round.getEvent().getCurrentRound() == 1) {
+			btnRevokeRound.setDisable(true);
+		} else {
+			btnRevokeRound.setDisable(false);
+		}
 	}
-
 
 	public void updateMatch(Match match, MatchListDvo dvo) {
 		int index = listOfMatches.indexOf(dvo);
 		listOfMatches.remove(index);
-		if(match.isFinished()) {
+		if (match.isFinished()) {
 			listOfMatches.add(dvo);
 			listViewOfMatches.getSelectionModel().clearAndSelect(listOfMatches.size() - 1);
 
@@ -145,29 +150,29 @@ public class MatchesPageController implements Serializable {
 	private void initRankingList() {
 		listOfRankings = FXCollections.observableArrayList();
 		listViewOfRankings.setItems(listOfRankings);
-		
+
 		tcStandingRank.setCellValueFactory(cellData -> cellData.getValue().getRankProperty());
 		tcStandingPlayer.setCellValueFactory(cellData -> cellData.getValue().getPlayerProperty());
 		tcStandingScore.setCellValueFactory(cellData -> cellData.getValue().getScoreStringProperty());
 		tcStandingPoints.setCellValueFactory(cellData -> cellData.getValue().getScoreProperty());
-		
+
 		tcStandingRank.setSortable(false);
 		tcStandingPlayer.setSortable(false);
 		tcStandingScore.setSortable(false);
 		tcStandingPoints.setSortable(false);
-		
+
 		updateRankingList();
 	}
-	
+
 	private void updateRankingList() {
-		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());	
+		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());
 		listOfRankings.clear();
 		listOfRankings.addAll(rankings);
-		
+
 	}
-	
-	public void finishRound() {		
-		if(!pageService.validateRound(round)) {
+
+	public void finishRound() {
+		if (!pageService.validateRound(round)) {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("unfinished Matches");
 			alert.setHeaderText("Warning");
@@ -177,31 +182,44 @@ public class MatchesPageController implements Serializable {
 		}
 		showAndWaitDetails();
 		round.setFinished(true);
-		Round nextRound = pageService.createNextRound(round.getEvent());		
+		Round nextRound = pageService.createNextRound(round.getEvent());
 		initialize(nextRound);
 	}
-	
+
+	public void revokeRound() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Revoke Round");
+		alert.setHeaderText("Please confirm");
+		alert.setContentText(
+				"When you revoke this round, all results of this round will be deleted and the previous round will be loaded and opened again.\nAre you sure you want to do this?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			Round prevRound = pageService.revokeRound(round);
+			initialize(prevRound);
+		}
+	}
+
 	public void goToPreviousRound() {
 		int currentRound = round.getEvent().getCurrentRound();
-		if(currentRound > 1) {
+		if (currentRound > 1) {
 			currentRound--;
 			round.getEvent().setCurrentRound(currentRound);
 			Round prevRound = ((ArrayList<Round>) round.getEvent().getRounds()).get(currentRound - 1);
 			initialize(prevRound);
 		}
 	}
-	
+
 	public void goToNextRound() {
-		
+
 		int currentRound = round.getEvent().getCurrentRound();
-		if(currentRound - 1 < round.getEvent().getRounds().size()) {
+		if (currentRound - 1 < round.getEvent().getRounds().size()) {
 			currentRound++;
 			round.getEvent().setCurrentRound(currentRound);
 			Round prevRound = ((ArrayList<Round>) round.getEvent().getRounds()).get(currentRound - 1);
 			initialize(prevRound);
 		}
 	}
-	
+
 	public void showDetails() {
 		try {
 			FXMLLoader loader = instanceOfLoader.get();
@@ -217,7 +235,7 @@ public class MatchesPageController implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void showAndWaitDetails() {
 		try {
 			FXMLLoader loader = instanceOfLoader.get();
@@ -233,9 +251,9 @@ public class MatchesPageController implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void finishEvent() {
-		if(!pageService.validateRound(round)) {
+		if (!pageService.validateRound(round)) {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("unfinished Matches");
 			alert.setHeaderText("Warning");

@@ -41,6 +41,15 @@
                   <Insets left="10.0" top="10.0" />
                </FlowPane.margin>
             </HBox>
+            <HBox prefWidth="280.0">
+               <children>
+                  <Label prefWidth="100.0" text="Member" />
+                  <CheckBox fx:id="cbMember" mnemonicParsing="false" selected="true" />
+               </children>
+               <FlowPane.margin>
+                  <Insets left="10.0" top="10.0" />
+               </FlowPane.margin>
+            </HBox>
             <Button fx:id="btnAddPlayer" mnemonicParsing="false" onAction="#addPlayer" text="Add Player">
                <FlowPane.margin>
                   <Insets left="20.0" top="10.0" />

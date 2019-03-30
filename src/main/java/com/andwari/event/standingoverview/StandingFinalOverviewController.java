@@ -1,10 +1,14 @@
 package com.andwari.event.standingoverview;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
 import com.andwari.core.tournamentcore.event.entity.Round;
+import com.andwari.core.tournamentcore.ranking.boundary.RankingService;
+import com.andwari.core.tournamentcore.ranking.entity.Rank;
 import com.andwari.core.tournamentcore.utils.BoosterDistributor;
 import com.andwari.event.matches.control.MatchesPageService;
 import com.andwari.event.rankings.dvos.RankingsDvo;
@@ -29,19 +33,22 @@ public class StandingFinalOverviewController {
 
 	@FXML
 	private Button btnOk;
-	
+
 	@Inject
 	private StandingListCellCallback callback;
-	
+
 	@Inject
 	private MatchesPageService pageService;
-	
+
 	@Inject
-	private BoosterDistributor distributor;
-	
+	private BoosterDistributor boosterDistributor;
+
+	@Inject
+	private RankingService rankService;
+
 	private Round round;
 	private ObservableList<RankingsDvo> listOfStandings;
-	
+
 	public void initialize(Round round) {
 		this.round = round;
 		listOfStandings = FXCollections.observableArrayList();
@@ -50,7 +57,7 @@ public class StandingFinalOverviewController {
 		initColumns();
 		initList();
 	}
-	
+
 	private void initColumns() {
 		colRank.setCellValueFactory(cellData -> cellData.getValue().getRankProperty());
 		colPlayer.setCellValueFactory(cellData -> cellData.getValue().getPlayerProperty());
@@ -60,7 +67,7 @@ public class StandingFinalOverviewController {
 		colOpGamescore.setCellValueFactory(cellData -> cellData.getValue().getOpGamesScoreProperty());
 		colRankingPts.setCellValueFactory(cellData -> cellData.getValue().getRankingPointsProperty());
 		colBooster.setCellValueFactory(cellData -> cellData.getValue().getBoosterProperty());
-		
+
 		colRank.setSortable(false);
 		colPlayer.setSortable(false);
 		colScore.setSortable(false);
@@ -74,24 +81,38 @@ public class StandingFinalOverviewController {
 
 	private void initList() {
 		listOfStandings.removeAll(listOfStandings);
-		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());	
+		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());
 		rankings.stream().forEach(dvo -> listOfStandings.add(dvo));
 		calculateBooster();
+		calculateRankPoints();
+	}
+
+	private void calculateRankPoints() {
+		List<Rank> rankPointsDistribution = rankService.getRankPointsDistribution(round.getEvent());
+		rankService.saveRankings(rankPointsDistribution);
+		for (int x = 0; x < listOfStandings.size(); x++) {
+			String playername = listOfStandings.get(x).getPlayer();
+			Optional<Rank> rank = rankPointsDistribution.stream()
+					.filter(r -> r.getPlayer().getPlayerName().equals(playername)).findFirst();
+			if (rank.isPresent()) {
+				listOfStandings.get(x).setRankingPoints(Integer.toString(rank.get().getPoints()));
+			}
+		}
 	}
 
 	private void calculateBooster() {
-		int[] distribution = distributor.getBoosterDistribution(round.getEvent().getRankings().size());
-		for(int x = 0; x < distribution.length; x++) {
+		int[] distribution = boosterDistributor.getBoosterDistribution(round.getEvent().getRankings().size());
+		for (int x = 0; x < distribution.length; x++) {
 			listOfStandings.get(x).setBooster(Integer.toString(distribution[x]));
 		}
-		for(int x = distribution.length; x < listOfStandings.size(); x++) {
+		for (int x = distribution.length; x < listOfStandings.size(); x++) {
 			listOfStandings.get(x).setBooster("0");
 		}
 	}
 
 	public void closeWindow() {
 		Stage stage = (Stage) btnOk.getScene().getWindow();
-	    stage.close();
+		stage.close();
 	}
 
 }

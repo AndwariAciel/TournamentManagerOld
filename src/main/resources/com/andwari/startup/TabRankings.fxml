@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+	prefWidth="1280.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.andwari.ranking.RankingPageController">
+	<center>
+		<TableView fx:id="tvListOfRankings"
+			BorderPane.alignment="CENTER">
+			<columns>
+				<TableColumn prefWidth="75.0" text="Rank" fx:id="tcRank" />
+				<TableColumn prefWidth="500.0" text="Player"
+					fx:id="tcPlayer" />
+				<TableColumn prefWidth="75.0" text="Points"
+					fx:id="tcPoints" />
+			</columns>
+		</TableView>
+	</center>
+	<right>
+		<FlowPane prefHeight="200.0" prefWidth="300.0"
+			BorderPane.alignment="TOP_LEFT">
+			<children>
+				<Label alignment="CENTER" prefWidth="280.0" text="Rankings"
+					textAlignment="CENTER">
+					<font>
+						<Font name="System Bold" size="14.0" />
+					</font>
+				</Label>
+				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+					<children>
+						<Button disable="true" mnemonicParsing="false" text="Year" fx:id="btYear" onAction="#switchMode">
+							<HBox.margin>
+								<Insets right="30.0" />
+							</HBox.margin>
+						</Button>
+						<Button mnemonicParsing="false" text="Month" fx:id="btMonth" onAction="#switchMode"/>
+					</children>
+				</HBox>
+				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+					<children>
+						<Label prefWidth="80.0" text="Year" />
+						<ChoiceBox prefWidth="150.0" fx:id="cbYear"/>
+					</children>
+				</HBox>
+				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+					<children>
+						<Label prefWidth="80.0" text="Month" />
+						<ChoiceBox disable="true" prefWidth="150.0" fx:id="cbMonth"/>
+					</children>
+				</HBox>
+			</children>
+		</FlowPane>
+	</right>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+	<top>
+		<FlowPane alignment="CENTER" columnHalignment="CENTER"
+			BorderPane.alignment="CENTER">
+			<children>
+				<Label alignment="CENTER" text="Rankings - Year" fx:id="lbHeading">
+					<font>
+						<Font size="24.0" />
+					</font>
+				</Label>
+			</children>
+			<BorderPane.margin>
+				<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+			</BorderPane.margin>
+		</FlowPane>
+	</top>
+</BorderPane>

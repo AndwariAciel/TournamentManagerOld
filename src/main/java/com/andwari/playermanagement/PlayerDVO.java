@@ -1,5 +1,6 @@
 package com.andwari.playermanagement;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class PlayerDVO {
@@ -7,11 +8,13 @@ public class PlayerDVO {
 	private SimpleStringProperty id;
 	private SimpleStringProperty name;
 	private SimpleStringProperty dci;
+	private SimpleBooleanProperty member;
 	
 	public PlayerDVO() {
 		id = new SimpleStringProperty();
 		name = new SimpleStringProperty();
 		dci = new SimpleStringProperty();
+		member = new SimpleBooleanProperty();
 	}
 	
 	public String getId() {
@@ -43,5 +46,17 @@ public class PlayerDVO {
 	
 	public SimpleStringProperty dciProperty() {
 		return dci;
+	}
+
+	public SimpleBooleanProperty memberProperty() {
+		return member;
+	}
+
+	public void setMember(boolean member) {
+		this.member.set(member);
+	}
+	
+	public Boolean getMember() {
+		return member.get();
 	}
 }

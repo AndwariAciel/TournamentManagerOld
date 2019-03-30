@@ -29,11 +29,12 @@ public class TabPlayerService {
 		dvo.setId(String.valueOf(player.getId()));
 		dvo.setName(player.getPlayerName());
 		dvo.setDci(player.getDci());
+		dvo.setMember(player.getMember());
 		return dvo;
 	}
 
-	public PlayerDVO createNewPlayer(String name, String dci) throws NameNotUniqueException {
-		Player player = playerService.addPlayer(name, dci);
+	public PlayerDVO createNewPlayer(String name, String dci, Boolean membership) throws NameNotUniqueException {
+		Player player = playerService.addPlayer(name, dci, membership);
 		return convertFromPlayer(player);
 	}
 

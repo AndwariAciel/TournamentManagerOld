@@ -2,8 +2,6 @@ package com.andwari.main;
 
 import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
-
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
 import com.andwari.playermanagement.PlayerDVO;
 import com.andwari.playermanagement.TabPlayerService;
@@ -13,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -33,6 +32,9 @@ public class TabPlayerController {
 	
 	@FXML
 	private Label lbWarning;
+	
+	@FXML
+	private CheckBox cbMember;
 	
 	@FXML
 	private Button btnDeletePlayer;
@@ -66,18 +68,17 @@ public class TabPlayerController {
 	}
 
 	public void addPlayer() {
-		Logger logger = Logger.getLogger(this.getClass());
-		logger.info("GO");
 		lbWarning.setVisible(false);
 		String name = tfPlayername.getText();
 		String dci = tfDciNumber.getText();
-		
+		Boolean membership = cbMember.isSelected();
 		PlayerDVO dvo;
 		try {
-			dvo = tabPlayerService.createNewPlayer(name, dci);
+			dvo = tabPlayerService.createNewPlayer(name, dci, membership);
 			listOfPlayers.add(dvo);
 			tfPlayername.setText("");
 			tfDciNumber.setText("");
+			cbMember.setSelected(true);
 		} catch (NameNotUniqueException e) {
 			lbWarning.setVisible(true);
 		}

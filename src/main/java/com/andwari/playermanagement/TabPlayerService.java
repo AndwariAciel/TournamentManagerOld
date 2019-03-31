@@ -26,7 +26,7 @@ public class TabPlayerService {
 	public PlayerDVO convertFromPlayer(Player player) {
 		PlayerDVO dvo = new PlayerDVO();
 
-		dvo.setId(String.valueOf(player.getId()));
+		dvo.setId(player.getId());
 		dvo.setName(player.getPlayerName());
 		dvo.setDci(player.getDci());
 		dvo.setMember(player.getMember());
@@ -39,7 +39,7 @@ public class TabPlayerService {
 	}
 
 	public void deletePlayer(PlayerDVO player) {
-		long id = Long.parseLong(player.getId());
+		long id = player.getId();
 		playerService.deletePlayer(id);
 
 	}
@@ -65,6 +65,10 @@ public class TabPlayerService {
 		String smallSearch = searchValue.toLowerCase();
 		return smallName.contains(smallSearch);
 
+	}
+
+	public void updatePlayer(PlayerDVO player) {
+		playerService.updatePlayer(player.getId(), player.getName(), player.getDci(), player.getMember());		
 	}
 
 }

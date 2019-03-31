@@ -1,62 +1,67 @@
 package com.andwari.playermanagement;
 
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class PlayerDVO {
-	
-	private SimpleStringProperty id;
+
+	private long id;
 	private SimpleStringProperty name;
 	private SimpleStringProperty dci;
-	private SimpleBooleanProperty member;
-	
+	private SimpleStringProperty member;
+	private boolean isMember;
+
 	public PlayerDVO() {
-		id = new SimpleStringProperty();
 		name = new SimpleStringProperty();
 		dci = new SimpleStringProperty();
-		member = new SimpleBooleanProperty();
+		member = new SimpleStringProperty();
 	}
-	
-	public String getId() {
-		return id.get();
+
+	public long getId() {
+		return id;
 	}
-	public void setId(String id) {
-		this.id.set(id);;
+
+	public void setId(long id) {
+		this.id = id;
 	}
+
 	public String getName() {
 		return name.get();
 	}
+
 	public void setName(String name) {
 		this.name.set(name);
 	}
+
 	public String getDci() {
 		return dci.get();
 	}
+
 	public void setDci(String dci) {
 		this.dci.set(dci);
 	}
 
-	public SimpleStringProperty idProperty() {
-		return id;
-	}
-	
 	public SimpleStringProperty nameProperty() {
 		return name;
 	}
-	
+
 	public SimpleStringProperty dciProperty() {
 		return dci;
 	}
 
-	public SimpleBooleanProperty memberProperty() {
+	public SimpleStringProperty memberProperty() {
 		return member;
 	}
 
 	public void setMember(boolean member) {
-		this.member.set(member);
+		isMember = member;
+		if(isMember) {
+			this.member.set("✔");;
+		} else {
+			this.member.set("✘");
+		}
 	}
-	
+
 	public Boolean getMember() {
-		return member.get();
+		return isMember;
 	}
 }

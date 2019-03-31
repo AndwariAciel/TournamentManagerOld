@@ -20,7 +20,7 @@ public class PlayerConverter {
 
 	private Player convert(PlayerDVO dvo) {
 		Player p = new Player();
-		p.setId(Long.parseLong(dvo.getId()));
+		p.setId(dvo.getId());
 		p.setPlayerName(dvo.getName());
 		p.setDci(dvo.getDci());
 		p.setMember(dvo.getMember());

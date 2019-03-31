@@ -3,16 +3,18 @@ package com.andwari.event.playerselection;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+
+import org.apache.log4j.Logger;
 
 import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.player.entity.Player;
 import com.andwari.event.seatings.SeatingsPageController;
+import com.andwari.event.settings.EventSettingsPageController;
 import com.andwari.playermanagement.PlayerConverter;
 import com.andwari.playermanagement.PlayerDVO;
 import com.andwari.playermanagement.TabPlayerService;
@@ -23,8 +25,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -67,12 +69,15 @@ public class PlayerSelectionController {
 	private Stage stage;
 
 	@Inject
-	private FXMLLoader fxmlLoader;
+	private Instance<FXMLLoader> fxmlLoaderInst;
 
 	@Inject
 	private EventService eventService;
+
+	@Inject
+	private FxmlPageManager finder;
 	
-	@Inject FxmlPageManager finder;
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	@FXML
 	public void initialize() {
@@ -182,7 +187,31 @@ public class PlayerSelectionController {
 	public void startEvent() {
 		List<Player> players = converter.convertBackToPlayer(listOfPlayersInEvent);
 		Event event = eventService.createNewEvent(players);
-		event.setMaxNumberOfRounds(askForMaxNumberOfRounds());
+		event.setMaxNumberOfRounds(eventService.getMaxNumberOfRounds(listOfPlayersInEvent.size()));
+		EventSettingsPageController settingsController = openNewWindow("event/EventSettings.fxml");
+		settingsController.init(event, this);
+	}
+
+	private EventSettingsPageController openNewWindow(String xhtmlPath) {
+		EventSettingsPageController controller = null;
+		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
+		try {
+			URL fxmlRes = finder.findFxmlResource(xhtmlPath);
+			fxmlLoader.setLocation(fxmlRes);
+			BorderPane root = fxmlLoader.load();
+			Scene scene = new Scene(root);
+			Stage newWindow = new Stage();
+			newWindow.setScene(scene);
+			controller = fxmlLoader.getController();
+			newWindow.show();
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return controller;
+	}
+
+	public void continueEvent(Event event) {
+		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
 			URL fxmlRes = finder.findFxmlResource("event/EventSeatings.fxml");
 			fxmlLoader.setLocation(fxmlRes);
@@ -198,16 +227,6 @@ public class PlayerSelectionController {
 			e.printStackTrace();
 		}
 
-	}
-
-	private int askForMaxNumberOfRounds() {
-		int maxNumberOfRounds = eventService.getMaxNumberOfRounds(listOfPlayersInEvent.size());
-		List<Integer> choices = IntStream.range(1, maxNumberOfRounds + 1).boxed().collect(Collectors.toList());
-		ChoiceDialog<Integer> dialog = new ChoiceDialog<Integer>(choices.get(choices.size()-1), choices);
-		dialog.setHeaderText("How many rounds do you want to play?");
-		dialog.setContentText("Rounds: ");
-		Integer choice = dialog.showAndWait().orElse(new Integer(0));
-		return choice.intValue();
 	}
 
 }

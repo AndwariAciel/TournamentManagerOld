@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>AndwarisTournamentManager</groupId>
 	<artifactId>AndwarisTournamentManager</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 
 	<properties>
 		<jdk.version>1.8</jdk.version>
@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>com.andwari.core</groupId>
 			<artifactId>tournamentcore</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.kohsuke/wordnet-random-name -->

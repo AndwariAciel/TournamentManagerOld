@@ -54,10 +54,11 @@ public class PlayerDVO {
 
 	public void setMember(boolean member) {
 		isMember = member;
-		if(isMember) {
-			this.member.set("✔");;
+		if (isMember) {
+			this.member.set("\u2714");
+			;
 		} else {
-			this.member.set("✘");
+			this.member.set("\u2718");
 		}
 	}
 

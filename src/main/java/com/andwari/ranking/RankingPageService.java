@@ -2,7 +2,6 @@ package com.andwari.ranking;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,17 +21,9 @@ public class RankingPageService {
 		return dvo;
 	}
 
-	public int parseMonth(String selectedItem) {
-		Optional<Month> month = Stream.of(Month.values()).filter(m -> m.getName().equals(selectedItem)).findFirst();
-		if (month.isPresent()) {
-			return month.get().getNumber();
-		}
-		return -1;
-	}
-
-	public String getCurrentMonth() {
+	public Month getCurrentMonth() {
 		int month = Calendar.getInstance().get(Calendar.MONTH);
-		return Stream.of(Month.values()).filter(m -> m.getNumber() == month).map(m -> m.getName()).findFirst().get();
+		return Stream.of(Month.values()).filter(m -> m.getNumber() == month).findFirst().get();
 	}
 
 }

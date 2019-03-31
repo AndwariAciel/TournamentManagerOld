@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefWidth="280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andwari.event.rankings.ManuelPointsPageController">
+	<top>
+		<Label text="Give points to player" BorderPane.alignment="CENTER">
+			<font>
+				<Font size="18.0" />
+			</font>
+			<BorderPane.margin>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</BorderPane.margin>
+		</Label>
+	</top>
+	<center>
+		<VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+			<children>
+				<TextField fx:id="tfSearch" promptText="search for player">
+					<VBox.margin>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</VBox.margin>
+				</TextField>
+				<ListView fx:id="listView" prefHeight="100.0" prefWidth="200.0">
+					<VBox.margin>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</VBox.margin>
+				</ListView>
+				<HBox prefWidth="200.0">
+					<children>
+						<Label prefWidth="50.0" text="Points:">
+							<HBox.margin>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+							</HBox.margin>
+						</Label>
+						<TextField fx:id="tfPoints">
+							<HBox.margin>
+								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+							</HBox.margin>
+						</TextField>
+					</children>
+				</HBox>
+            <HBox prefWidth="200.0">
+               <children>
+                  <Label prefWidth="50.0" text="Year:">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfYear">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefWidth="200.0">
+               <children>
+                  <Label prefWidth="50.0" text="Month:">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="cbMonth" prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+				<Label text="Comment">
+					<VBox.margin>
+						<Insets left="10.0" />
+					</VBox.margin>
+				</Label>
+				<TextArea fx:id="taComment" prefHeight="100.0" prefWidth="200.0">
+					<VBox.margin>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</VBox.margin>
+				</TextArea>
+			</children>
+		</VBox>
+	</center>
+	<bottom>
+		<Button mnemonicParsing="false" text="OK" BorderPane.alignment="CENTER" onAction="#givePointsAndClose">
+			<BorderPane.margin>
+				<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+			</BorderPane.margin>
+		</Button>
+	</bottom>
+</BorderPane>

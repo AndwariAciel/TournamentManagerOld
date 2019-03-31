@@ -1,10 +1,14 @@
 package com.andwari.ranking;
 
+import java.net.URL;
 import java.util.List;
-import java.util.stream.Stream;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
+
+import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.ranking.boundary.RankingService;
 import com.andwari.core.tournamentcore.ranking.control.PlayerRank;
 
@@ -13,11 +17,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class RankingPageController {
 
@@ -38,7 +46,9 @@ public class RankingPageController {
 	private Button btYear, btMonth;
 
 	@FXML
-	private ChoiceBox<String> cbYear, cbMonth;
+	private ChoiceBox<String> cbYear;
+	@FXML
+	private ChoiceBox<Month> cbMonth;
 
 	@FXML
 	private Label lbHeading;
@@ -50,6 +60,13 @@ public class RankingPageController {
 
 	@Inject
 	private RankingPageService pageService;
+
+	@Inject
+	private Instance<FXMLLoader> fxmlLoaderInst;
+	@Inject
+	private FxmlPageManager finder;
+
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	@FXML
 	public void initialize() {
@@ -97,11 +114,11 @@ public class RankingPageController {
 
 	private void updateLabelMonth() {
 		String year = cbYear.getSelectionModel().getSelectedItem();
-		String month = cbMonth.getSelectionModel().getSelectedItem();
+		String month = cbMonth.getSelectionModel().getSelectedItem().toString();
 		lbHeading.setText(HEADING + month + " " + year);
 	}
 
-	private void updateLabelMonth(String month) {
+	private void updateLabelMonth(Month month) {
 		String year = cbYear.getSelectionModel().getSelectedItem();
 		lbHeading.setText(HEADING + month + " " + year);
 	}
@@ -120,8 +137,9 @@ public class RankingPageController {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				int year = Integer.parseInt(cbYear.getSelectionModel().getSelectedItem());
+				Month month = cbMonth.getItems().get((Integer) newValue);
 				updateLabelMonth(cbMonth.getItems().get((Integer) newValue));
-				loadRanksForMonth(year, (Integer) newValue);
+				loadRanksForMonth(year, month.getNumber());
 			}
 
 		});
@@ -142,9 +160,7 @@ public class RankingPageController {
 
 	private void loadRanksForMonth() {
 		String year = cbYear.getSelectionModel().getSelectedItem();
-		int month = pageService.parseMonth(cbMonth.getSelectionModel().getSelectedItem());
-		if (year != null && month != -1)
-			System.out.println("Load " + year + " " + month);
+		int month = cbMonth.getSelectionModel().getSelectedItem().getNumber();
 		loadRanksForMonth(Integer.parseInt(year), month);
 	}
 
@@ -173,9 +189,9 @@ public class RankingPageController {
 		if (years.isEmpty()) {
 			return;
 		}
-		Stream.of(Month.values()).forEach(m -> cbMonth.getItems().add(m.getName()));
+		cbMonth.getItems().addAll(Month.values());
 		years.stream().forEach(y -> cbYear.getItems().add(y));
-		String currentMonth = pageService.getCurrentMonth();
+		Month currentMonth = pageService.getCurrentMonth();
 		cbMonth.getSelectionModel().select(currentMonth);
 		cbYear.getSelectionModel().select(0);
 	}
@@ -188,6 +204,22 @@ public class RankingPageController {
 		tcRank.setSortable(false);
 		tcPlayer.setSortable(false);
 		tcPoints.setSortable(false);
+	}
+
+	public void givePoints() {
+		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
+		try {
+			URL fxmlRes = finder.findFxmlResource("event/rankings/RankingManually.fxml");
+			fxmlLoader.setLocation(fxmlRes);
+			BorderPane root = fxmlLoader.load();
+			Scene scene = new Scene(root);
+			Stage newWindow = new Stage();
+			newWindow.setScene(scene);
+			newWindow.showAndWait();
+			loadList();
+		} catch (Exception e) {
+			logger.error(e);
+		}
 	}
 
 }

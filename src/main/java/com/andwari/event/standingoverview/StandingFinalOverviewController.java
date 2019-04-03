@@ -88,15 +88,19 @@ public class StandingFinalOverviewController {
 	}
 
 	private void calculateRankPoints() {
-		List<Rank> rankPointsDistribution = rankService.getRankPointsDistribution(round.getEvent());
-		rankService.saveRankings(rankPointsDistribution);
-		for (int x = 0; x < listOfStandings.size(); x++) {
-			String playername = listOfStandings.get(x).getPlayer();
-			Optional<Rank> rank = rankPointsDistribution.stream()
-					.filter(r -> r.getPlayer().getPlayerName().equals(playername)).findFirst();
-			if (rank.isPresent()) {
-				listOfStandings.get(x).setRankingPoints(Integer.toString(rank.get().getPoints()));
+		if (round.getEvent().getRankingPoints()) {
+			List<Rank> rankPointsDistribution = rankService.getRankPointsDistribution(round.getEvent());
+			rankService.saveRankings(rankPointsDistribution);
+			for (int x = 0; x < listOfStandings.size(); x++) {
+				String playername = listOfStandings.get(x).getPlayer();
+				Optional<Rank> rank = rankPointsDistribution.stream()
+						.filter(r -> r.getPlayer().getPlayerName().equals(playername)).findFirst();
+				if (rank.isPresent()) {
+					listOfStandings.get(x).setRankingPoints(Integer.toString(rank.get().getPoints()));
+				}
 			}
+		} else {
+			listOfStandings.stream().forEach(r -> r.setRankingPoints("-"));
 		}
 	}
 

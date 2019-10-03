@@ -27,76 +27,76 @@ public class SeatingsPageController {
 
 	@FXML
 	private TableView<SeatingsDvo> tvSeatings;
-	
+
 	@FXML
 	private TableColumn<SeatingsDvo, String> tcSeat;
 	@FXML
 	private TableColumn<SeatingsDvo, String> tcPlayer;
-	
+
 	private ObservableList<SeatingsDvo> listOfSeatings;
-	
+
 	private Event event;
-	
-	@Inject 
+
+	@Inject
 	private FXMLLoader fxmlLoader;
-	
+
 	@Inject
 	private EventService eventService;
-	
+
 	private Stage stage;
-	
+
 	@Inject
 	private MatchFactory matchFactory;
-	
-	@Inject 
+
+	@Inject
 	private SeatingsDvoConverter converter;
-	
+
 	@Inject
 	private EventRepository eventRepos;
-	
+
 	@Inject
 	private FxmlPageManager finder;
-	
+
 	public void setEvent(Event event) {
 		this.event = event;
 	}
-	
-	public void init() {		
+
+	public void init() {
 		listOfSeatings = FXCollections.observableArrayList();
 		List<Player> seatings = eventService.createSeatings(event);
-		for(int x = 1; x <= seatings.size(); x++) {
-			listOfSeatings.add(converter.convertToDto(seatings.get(x-1), x));
+		for (int x = 1; x <= seatings.size(); x++) {
+			listOfSeatings.add(converter.convertToDto(seatings.get(x - 1), x));
 		}
-		
+
 		tcSeat.setCellValueFactory(cellData -> cellData.getValue().getSeatingNumberProperty());
 		tcPlayer.setCellValueFactory(cellData -> cellData.getValue().getPlayerNameProperty());
-		
+
 		tcSeat.setSortable(false);
 		tcPlayer.setSortable(false);
-		
-		tvSeatings.setItems(listOfSeatings);	
+
+		tvSeatings.setItems(listOfSeatings);
 		tvSeatings.setSelectionModel(null);
 	}
-	
+
 	public void setStage(Stage stage) {
 		this.stage = stage;
 	}
-	
+
 	public void startFirstRound() {
 		Round round1 = matchFactory.createCrosspairings(event);
 		event.getRounds().add(round1);
 		event.setCurrentRound(1);
 		eventRepos.update(event);
-		
+
 		try {
 			fxmlLoader.setLocation(finder.findFxmlResource("event/matches/EventMatches.fxml"));
 			BorderPane root = (BorderPane) fxmlLoader.load();
 			MatchesPageController controller = fxmlLoader.getController();
-			controller.initialize(round1);			
-			
+			controller.initialize(round1);
+
 			stage.getScene().setRoot(root);
-			
-		} catch (IOException e) {			
+
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

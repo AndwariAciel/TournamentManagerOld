@@ -27,22 +27,22 @@ public class EventSettingsPageController {
 	@FXML
 	private Button btnOk;
 
-	private boolean manuelley;
+	private boolean manualley;
 	private Event event;
 	private PlayerSelectionController playerSelectionController;
 
 	public void startEvent() {
 		event.setEventName(tfEventName.getText());
 		event.setRankingPoints(cbRankpoints.isSelected());
-		playerSelectionController.continueEvent(event, manuelley);
+		playerSelectionController.continueEvent(event, manualley);
 		Stage stage = (Stage) btnOk.getScene().getWindow();
 		stage.close();
 	}
 
-	public void init(Event event, PlayerSelectionController controller, boolean manuelley) {
+	public void init(Event event, PlayerSelectionController controller, boolean manualley) {
 		this.event = event;
 		this.playerSelectionController = controller;
-		this.manuelley = manuelley;
+		this.manualley = manualley;
 		lbDate.setText(parseDate(event.getCreated()));
 		lbRounds.setText(Integer.toString(event.getMaxNumberOfRounds()));
 	}

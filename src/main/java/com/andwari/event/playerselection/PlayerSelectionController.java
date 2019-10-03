@@ -13,6 +13,7 @@ import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.player.entity.Player;
+import com.andwari.event.pairings.PairingsPageController;
 import com.andwari.event.seatings.SeatingsPageController;
 import com.andwari.event.settings.EventSettingsPageController;
 import com.andwari.playermanagement.PlayerConverter;
@@ -76,7 +77,7 @@ public class PlayerSelectionController {
 
 	@Inject
 	private FxmlPageManager finder;
-	
+
 	private Logger logger = Logger.getLogger(this.getClass());
 
 	@FXML
@@ -189,7 +190,15 @@ public class PlayerSelectionController {
 		Event event = eventService.createNewEvent(players);
 		event.setMaxNumberOfRounds(eventService.getMaxNumberOfRounds(listOfPlayersInEvent.size()));
 		EventSettingsPageController settingsController = openNewWindow("event/EventSettings.fxml");
-		settingsController.init(event, this);
+		settingsController.init(event, this, false);
+	}
+
+	public void startEventManuelly() {
+		List<Player> players = converter.convertBackToPlayer(listOfPlayersInEvent);
+		Event event = eventService.createNewEvent(players);
+		event.setMaxNumberOfRounds(eventService.getMaxNumberOfRounds(listOfPlayersInEvent.size()));
+		EventSettingsPageController settingsController = openNewWindow("event/EventSettings.fxml");
+		settingsController.init(event, this, true);
 	}
 
 	private EventSettingsPageController openNewWindow(String xhtmlPath) {
@@ -210,7 +219,15 @@ public class PlayerSelectionController {
 		return controller;
 	}
 
-	public void continueEvent(Event event) {
+	public void continueEvent(Event event, boolean manuelly) {
+		if (manuelly) {
+			continueEventManually(event);
+		} else {
+			continueEvent(event);
+		}
+	}
+
+	private void continueEvent(Event event) {
 		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
 			URL fxmlRes = finder.findFxmlResource("event/EventSeatings.fxml");
@@ -227,6 +244,24 @@ public class PlayerSelectionController {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void continueEventManually(Event event) {
+		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
+		try {
+			URL fxmlRes = finder.findFxmlResource("event/pairings/Pairings.fxml");
+			fxmlLoader.setLocation(fxmlRes);
+			BorderPane root = (BorderPane) fxmlLoader.load();
+			PairingsPageController controller = fxmlLoader.getController();
+			controller.setEvent(event);
+			controller.setStage(stage);
+
+			stage.getScene().setRoot(root);
+
+			controller.init();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -1,8 +1,8 @@
 package com.andwari.event.pairings;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.player.entity.Player;
@@ -16,7 +16,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
 
 public class PairingsPageController {
@@ -53,16 +57,26 @@ public class PairingsPageController {
 
 		listRight = FXCollections.observableArrayList(getEmptyPlayers(listPlayers.size()));
 		playersRight.setItems(listRight);
-//		playersRight.setStyle("-fx-background-color: white;");
 		playersRight.setCellFactory(new PairingsListCellFactory(playersList));
 
 		listLeft = FXCollections.observableArrayList(getEmptyPlayers(listPlayers.size()));
 		playersLeft.setItems(listLeft);
 		playersLeft.setCellFactory(new PairingsListCellFactory(playersList));
+
+		disableByeFieldIfUnevenPlayers(listPlayers.size());
+		setDnDEventsToTextField(byeText);
+	}
+
+	private void disableByeFieldIfUnevenPlayers(int size) {
+		if (size % 2 == 0) {
+			byeText.setVisible(false);
+			byeLabel.setVisible(false);
+		}
+
 	}
 
 	public void linkViews() {
-		Node n1 = playersRight.lookup(".scroll-bar");
+		Node n1 = playersRight.lookup(".scroll-bar:vertical");
 		if (n1 instanceof ScrollBar) {
 			final ScrollBar bar1 = (ScrollBar) n1;
 			Node n2 = playersLeft.lookup(".scroll-bar");
@@ -75,11 +89,7 @@ public class PairingsPageController {
 	}
 
 	private List<Player> getEmptyPlayers(int size) {
-		ArrayList<Player> emptyList = new ArrayList<>();
-		for (int x = 0; x < size / 2; x++) {
-			emptyList.add(new EmptyPlayer());
-		}
-		return emptyList;
+		return IntStream.range(0, size / 2).mapToObj(i -> new EmptyPlayer()).collect(Collectors.toList());
 	}
 
 	private List<Player> getPlayersFromEvent() {
@@ -92,6 +102,46 @@ public class PairingsPageController {
 
 	public void setStage(Stage stage) {
 		this.stage = stage;
+	}
+
+	private void setDnDEventsToTextField(TextField field) {
+		field.setOnDragDetected((MouseEvent event) -> {
+			if (field.getText() == null || field.getText().isEmpty()) {
+				event.consume();
+				return;
+			}
+			Dragboard db = field.startDragAndDrop(TransferMode.MOVE);
+			ClipboardContent content = new ClipboardContent();
+			content.put(PairingsPageController.dndKey, parsePlayer(field.getText()));
+			db.setContent(content);
+			event.consume();
+		});
+
+		field.setOnDragDone(e -> {
+			if (e.getTransferMode() != null) {
+				field.setText(null);
+			}
+			e.consume();
+		});
+
+		field.setOnDragOver(e -> {
+			if (e.getTransferMode().equals(TransferMode.MOVE)) {
+				e.acceptTransferModes(TransferMode.MOVE);
+			}
+			e.consume();
+		});
+
+		field.setOnDragDropped(e -> {
+			Player player = (Player) e.getDragboard().getContent(PairingsPageController.dndKey);
+			field.setText(player.getPlayerName());
+			e.setDropCompleted(true);
+			e.consume();
+		});
+	}
+
+	private Player parsePlayer(String playerName) {
+		return getPlayersFromEvent().stream().filter(p -> p.getPlayerName().equals(playerName)).findFirst()
+				.orElseThrow(() -> new IllegalStateException("No Player found in Event."));
 	}
 
 }

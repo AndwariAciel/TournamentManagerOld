@@ -41,6 +41,21 @@ class PlayerListCellFactory implements Callback<ListView<Player>, ListCell<Playe
 			}
 			e.consume();
 		});
+
+		cell.setOnDragOver(e -> {
+			if (e.getTransferMode().equals(TransferMode.MOVE)) {
+				e.acceptTransferModes(TransferMode.MOVE);
+			}
+			e.consume();
+		});
+
+		cell.setOnDragDropped(e -> {
+			Player player = (Player) e.getDragboard().getContent(PairingsPageController.dndKey);
+			list.getItems().add(player);
+			e.setDropCompleted(true);
+			e.consume();
+		});
+
 		return cell;
 	}
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -7,8 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane prefHeight="700.0" prefWidth="1180.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.andwari.event.pairings.PairingsPageController">
+<BorderPane prefHeight="700.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andwari.event.pairings.PairingsPageController">
    <center>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
@@ -40,6 +40,9 @@
                      <VBox.margin>
                         <Insets bottom="10.0" left="100.0" right="100.0" top="10.0" />
                      </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
                   </TextField>
                </children>
             </VBox>

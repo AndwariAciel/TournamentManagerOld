@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>AndwarisTournamentManager</groupId>
 	<artifactId>AndwarisTournamentManager</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4-SNAPSHOT</version>
 
 	<properties>
 		<jdk.version>1.8</jdk.version>
@@ -72,7 +72,7 @@
 		<connection>scm:git:git@192.168.0.99:Andwari/tournamentmanager_gui.git</connection>
 		<developerConnection>scm:git:git@192.168.0.99:Andwari/tournamentmanager_gui.git</developerConnection>
 		<url>http://192.168.0.99:Andwari/tournamentmanager_gui.git</url>
-		<tag>AndwarisTournamentManager-0.0.3</tag>
+		<tag>@{project.version}</tag>
 	</scm>
 	
 	

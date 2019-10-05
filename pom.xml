@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>com.andwari.core</groupId>
 			<artifactId>tournamentcore</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+			<version>0.0.3</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.kohsuke/wordnet-random-name -->

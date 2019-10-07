@@ -6,7 +6,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import com.andwari.core.tournamentcore.database.DatabaseManager;
+import com.andwari.password.PasswordHandler;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -15,8 +18,13 @@ import javafx.stage.Stage;
 
 public class DatabaseBackupHandler {
 
+	@Inject
+	private PasswordHandler pwHandler;
+
 	public void restoreDatabase(Stage stage) {
-		// TODO: Master Password
+		if (!pwHandler.askForMasterPassword()) {
+			return;
+		}
 		FileChooser fileChooser = new FileChooser();
 		File selectedFile = fileChooser.showOpenDialog(stage);
 		if (selectedFile != null) {

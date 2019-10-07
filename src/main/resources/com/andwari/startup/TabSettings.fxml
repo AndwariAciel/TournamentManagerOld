@@ -81,7 +81,7 @@
                         </Label>
                      </top>
                      <center>
-                        <Button fx:id="btnChangeMasterPassword" mnemonicParsing="false" text="Change Password" BorderPane.alignment="CENTER">
+                        <Button fx:id="btnChangeMasterPassword" mnemonicParsing="false" text="Change Password" BorderPane.alignment="CENTER" onAction="#changeMasterPassword">
                            <BorderPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </BorderPane.margin>

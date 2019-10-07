@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import com.andwari.password.PasswordHandler;
 import com.andwari.settings.control.DatabaseBackupHandler;
 
 import javafx.fxml.FXML;
@@ -26,6 +27,9 @@ public class SettingsPageController {
 
 	@Inject
 	private DatabaseBackupHandler backupHandler;
+
+	@Inject
+	private PasswordHandler pwHandler;
 
 	@FXML
 	public void initialize() {
@@ -51,6 +55,6 @@ public class SettingsPageController {
 	}
 
 	public void changeMasterPassword() {
-
+		pwHandler.changeMasterPassword();
 	}
 }

@@ -1,16 +1,15 @@
 package com.andwari.main;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
 import com.andwari.playermanagement.EditPlayerPageController;
 import com.andwari.playermanagement.PlayerDVO;
 import com.andwari.playermanagement.TabPlayerService;
+import com.andwari.util.FxmlResource;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,8 +52,6 @@ public class TabPlayerController {
 
 	@Inject
 	private Instance<FXMLLoader> fxmlLoaderInst;
-	@Inject
-	private FxmlPageManager finder;
 
 	@Inject
 	private TabPlayerService tabPlayerService;
@@ -120,8 +117,7 @@ public class TabPlayerController {
 	private void editPlayer(PlayerDVO playerDVO) {
 		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
-			URL fxmlRes = finder.findFxmlResource("playermanagement/PlayerEdit.fxml");
-			fxmlLoader.setLocation(fxmlRes);
+			fxmlLoader.setLocation(FxmlResource.PLAYERMANAGEMENT_EDIT.getResourceUrl());
 			BorderPane root = fxmlLoader.load();
 			Scene scene = new Scene(root);
 			Stage newWindow = new Stage();

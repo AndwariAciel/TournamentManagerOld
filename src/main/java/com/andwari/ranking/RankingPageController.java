@@ -1,6 +1,5 @@
 package com.andwari.ranking;
 
-import java.net.URL;
 import java.util.List;
 
 import javax.enterprise.inject.Instance;
@@ -8,9 +7,9 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.ranking.boundary.RankingService;
 import com.andwari.core.tournamentcore.ranking.control.PlayerRank;
+import com.andwari.util.FxmlResource;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -63,8 +62,6 @@ public class RankingPageController {
 
 	@Inject
 	private Instance<FXMLLoader> fxmlLoaderInst;
-	@Inject
-	private FxmlPageManager finder;
 
 	private Logger logger = Logger.getLogger(this.getClass());
 
@@ -209,8 +206,7 @@ public class RankingPageController {
 	public void givePoints() {
 		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
-			URL fxmlRes = finder.findFxmlResource("event/rankings/RankingManually.fxml");
-			fxmlLoader.setLocation(fxmlRes);
+			fxmlLoader.setLocation(FxmlResource.RANKINGS.getResourceUrl());
 			BorderPane root = fxmlLoader.load();
 			Scene scene = new Scene(root);
 			Stage newWindow = new Stage();

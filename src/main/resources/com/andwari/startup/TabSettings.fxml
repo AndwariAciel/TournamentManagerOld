@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="masterPane" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andwari.settings.SettingsPageController">
+   <top>
+      <Label text="Settings" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox>
+               <children>
+                  <BorderPane>
+                     <top>
+                        <Label text="Backup Database" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font name="Consolas" size="18.0" />
+                           </font>
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </BorderPane.margin>
+                        </Label>
+                     </top>
+                     <center>
+                        <GridPane BorderPane.alignment="CENTER">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" />
+                            <ColumnConstraints hgrow="SOMETIMES" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints vgrow="SOMETIMES" />
+                            <RowConstraints vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="btnDatabaseBackup" mnemonicParsing="false" text="Backup" onAction="#backupDatabase">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button fx:id="btnDatabaseRestore" mnemonicParsing="false" text="Restore" GridPane.rowIndex="1" onAction="#restoreDatabase">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <TextField fx:id="tfBackupPath" minWidth="200.0" prefWidth="250.0" promptText="..." GridPane.columnIndex="1" onMouseClicked="#chooseBackupPath">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                           </children>
+                        </GridPane>
+                     </center>
+                  </BorderPane>
+                  <Separator>
+                     <VBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <BorderPane>
+                     <top>
+                        <Label text="Organizer Password" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </BorderPane.margin>
+                           <font>
+                              <Font name="Consolas" size="18.0" />
+                           </font>
+                        </Label>
+                     </top>
+                     <center>
+                        <Button fx:id="btnChangeMasterPassword" mnemonicParsing="false" text="Change Password" BorderPane.alignment="CENTER" onAction="#changeMasterPassword">
+                           <BorderPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </BorderPane.margin>
+                        </Button>
+                     </center>
+                  </BorderPane>
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" />
+         </children>
+      </HBox>
+   </center>
+</BorderPane>

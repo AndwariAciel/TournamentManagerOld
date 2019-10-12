@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
 import com.andwari.core.tournamentcore.player.entity.Player;
@@ -19,6 +18,7 @@ import com.andwari.event.settings.EventSettingsPageController;
 import com.andwari.playermanagement.PlayerConverter;
 import com.andwari.playermanagement.PlayerDVO;
 import com.andwari.playermanagement.TabPlayerService;
+import com.andwari.util.FxmlResource;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -74,9 +74,6 @@ public class PlayerSelectionController {
 
 	@Inject
 	private EventService eventService;
-
-	@Inject
-	private FxmlPageManager finder;
 
 	private Logger logger = Logger.getLogger(this.getClass());
 
@@ -189,7 +186,7 @@ public class PlayerSelectionController {
 		List<Player> players = converter.convertBackToPlayer(listOfPlayersInEvent);
 		Event event = eventService.createNewEvent(players);
 		event.setMaxNumberOfRounds(eventService.getMaxNumberOfRounds(listOfPlayersInEvent.size()));
-		EventSettingsPageController settingsController = openNewWindow("event/EventSettings.fxml");
+		EventSettingsPageController settingsController = openNewWindow("com/andwari/event/EventSettings.fxml");
 		settingsController.init(event, this, false);
 	}
 
@@ -197,7 +194,7 @@ public class PlayerSelectionController {
 		List<Player> players = converter.convertBackToPlayer(listOfPlayersInEvent);
 		Event event = eventService.createNewEvent(players);
 		event.setMaxNumberOfRounds(eventService.getMaxNumberOfRounds(listOfPlayersInEvent.size()));
-		EventSettingsPageController settingsController = openNewWindow("event/EventSettings.fxml");
+		EventSettingsPageController settingsController = openNewWindow("com/andwari/event/EventSettings.fxml");
 		settingsController.init(event, this, true);
 	}
 
@@ -205,7 +202,7 @@ public class PlayerSelectionController {
 		EventSettingsPageController controller = null;
 		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
-			URL fxmlRes = finder.findFxmlResource(xhtmlPath);
+			URL fxmlRes = getClass().getClassLoader().getResource(xhtmlPath);
 			fxmlLoader.setLocation(fxmlRes);
 			BorderPane root = fxmlLoader.load();
 			Scene scene = new Scene(root);
@@ -230,8 +227,7 @@ public class PlayerSelectionController {
 	private void continueEvent(Event event) {
 		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
-			URL fxmlRes = finder.findFxmlResource("event/EventSeatings.fxml");
-			fxmlLoader.setLocation(fxmlRes);
+			fxmlLoader.setLocation(FxmlResource.EVENT_SEATINGS.getResourceUrl());
 			BorderPane root = (BorderPane) fxmlLoader.load();
 			SeatingsPageController controller = fxmlLoader.getController();
 			controller.setEvent(event);
@@ -249,8 +245,7 @@ public class PlayerSelectionController {
 	private void continueEventManually(Event event) {
 		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
-			URL fxmlRes = finder.findFxmlResource("event/pairings/Pairings.fxml");
-			fxmlLoader.setLocation(fxmlRes);
+			fxmlLoader.setLocation(FxmlResource.PAIRINGS.getResourceUrl());
 			BorderPane root = (BorderPane) fxmlLoader.load();
 			PairingsPageController controller = fxmlLoader.getController();
 			controller.setEvent(event);

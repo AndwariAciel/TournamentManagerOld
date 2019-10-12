@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.event.entity.Match;
 import com.andwari.core.tournamentcore.event.entity.Round;
 import com.andwari.event.matches.control.MatchListCallback;
@@ -16,6 +15,7 @@ import com.andwari.event.matches.dvos.MatchListDvo;
 import com.andwari.event.rankings.dvos.RankingsDvo;
 import com.andwari.event.standingoverview.StandingFinalOverviewController;
 import com.andwari.event.standingoverview.StandingOverviewController;
+import com.andwari.util.FxmlResource;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,9 +73,6 @@ public class MatchesPageController implements Serializable {
 
 	@Inject
 	private Instance<FXMLLoader> instanceOfLoader;
-
-	@Inject
-	private FxmlPageManager finder;
 
 	public void initialize(Round round) {
 		this.round = round;
@@ -223,7 +220,7 @@ public class MatchesPageController implements Serializable {
 	public void showDetails() {
 		try {
 			FXMLLoader loader = instanceOfLoader.get();
-			loader.setLocation(finder.findFxmlResource("event/StandingOverview.fxml"));
+			loader.setLocation(FxmlResource.EVENT_STANDINGS_OVERVIEW.getResourceUrl());
 			BorderPane root = loader.load();
 			Scene scene = new Scene(root);
 			Stage newWindow = new Stage();
@@ -239,7 +236,7 @@ public class MatchesPageController implements Serializable {
 	public void showAndWaitDetails() {
 		try {
 			FXMLLoader loader = instanceOfLoader.get();
-			loader.setLocation(finder.findFxmlResource("event/StandingOverview.fxml"));
+			loader.setLocation(FxmlResource.EVENT_STANDINGS_OVERVIEW.getResourceUrl());
 			BorderPane root = loader.load();
 			Scene scene = new Scene(root);
 			Stage newWindow = new Stage();
@@ -265,7 +262,7 @@ public class MatchesPageController implements Serializable {
 		initialize(round);
 		try {
 			FXMLLoader loader = instanceOfLoader.get();
-			loader.setLocation(finder.findFxmlResource("event/StandingFinalOverview.fxml"));
+			loader.setLocation(FxmlResource.EVENT_STANDINGS_FINAL.getResourceUrl());
 			BorderPane root = loader.load();
 			Scene scene = new Scene(root);
 			Stage newWindow = new Stage();

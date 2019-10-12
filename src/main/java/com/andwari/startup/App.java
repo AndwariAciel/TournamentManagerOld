@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import com.andwari.core.tournamentcore.database.DatabaseManager;
 import com.andwari.password.PasswordHandler;
+import com.andwari.util.FxmlResource;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +28,7 @@ public class App {
 		pwHandler.initDefaultMasterPassword();
 		try {
 
-			URL fxmlRes = getClass().getResource("mainWindow.fxml");
+			URL fxmlRes = getClass().getClassLoader().getResource(FxmlResource.MAIN.getPath());
 			fxmlLoader.setLocation(fxmlRes);
 			TabPane root = fxmlLoader.load();
 			Scene scene = new Scene(root);

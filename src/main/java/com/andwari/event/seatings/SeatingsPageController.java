@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.event.EventRepository;
 import com.andwari.core.tournamentcore.event.boundary.EventService;
 import com.andwari.core.tournamentcore.event.entity.Event;
@@ -13,6 +12,7 @@ import com.andwari.core.tournamentcore.event.entity.Round;
 import com.andwari.core.tournamentcore.matches.MatchFactory;
 import com.andwari.core.tournamentcore.player.entity.Player;
 import com.andwari.event.matches.MatchesPageController;
+import com.andwari.util.FxmlResource;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,9 +54,6 @@ public class SeatingsPageController {
 	@Inject
 	private EventRepository eventRepos;
 
-	@Inject
-	private FxmlPageManager finder;
-
 	public void setEvent(Event event) {
 		this.event = event;
 	}
@@ -89,7 +86,7 @@ public class SeatingsPageController {
 		eventRepos.update(event);
 
 		try {
-			fxmlLoader.setLocation(finder.findFxmlResource("event/matches/EventMatches.fxml"));
+			fxmlLoader.setLocation(FxmlResource.EVENT_MATCHES_EVENTMATCHES.getResourceUrl());
 			BorderPane root = (BorderPane) fxmlLoader.load();
 			MatchesPageController controller = fxmlLoader.getController();
 			controller.initialize(round1);

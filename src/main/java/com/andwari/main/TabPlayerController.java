@@ -6,6 +6,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
+import com.andwari.password.PasswordHandler;
 import com.andwari.playermanagement.EditPlayerPageController;
 import com.andwari.playermanagement.PlayerDVO;
 import com.andwari.playermanagement.TabPlayerService;
@@ -63,6 +64,9 @@ public class TabPlayerController {
 	@FXML
 	private TableColumn<PlayerDVO, String> tcName, tcDci, tcMember;
 
+	@Inject
+	private PasswordHandler password;
+
 	@FXML
 	public void initialize() {
 		listOfPlayers = FXCollections.observableArrayList(tabPlayerService.getAllPlayersFromDatabase());
@@ -109,9 +113,11 @@ public class TabPlayerController {
 	}
 
 	public void deletePlayer() {
-//		PlayerDVO player = tvListOfPlayers.getSelectionModel().getSelectedItem();
-//		tabPlayerService.deletePlayer(player);
-//		listOfPlayers.remove(player);
+		if (password.askForMasterPassword()) {
+			PlayerDVO player = tvListOfPlayers.getSelectionModel().getSelectedItem();
+			tabPlayerService.deletePlayer(player);
+			listOfPlayers.remove(player);
+		}
 	}
 
 	private void editPlayer(PlayerDVO playerDVO) {

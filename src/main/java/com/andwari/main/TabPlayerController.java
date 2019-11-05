@@ -1,16 +1,16 @@
 package com.andwari.main;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import com.andwari.FxmlPageManager;
 import com.andwari.core.tournamentcore.player.exceptions.NameNotUniqueException;
+import com.andwari.password.PasswordHandler;
 import com.andwari.playermanagement.EditPlayerPageController;
 import com.andwari.playermanagement.PlayerDVO;
 import com.andwari.playermanagement.TabPlayerService;
+import com.andwari.util.FxmlResource;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,8 +53,6 @@ public class TabPlayerController {
 
 	@Inject
 	private Instance<FXMLLoader> fxmlLoaderInst;
-	@Inject
-	private FxmlPageManager finder;
 
 	@Inject
 	private TabPlayerService tabPlayerService;
@@ -65,6 +63,9 @@ public class TabPlayerController {
 
 	@FXML
 	private TableColumn<PlayerDVO, String> tcName, tcDci, tcMember;
+
+	@Inject
+	private PasswordHandler password;
 
 	@FXML
 	public void initialize() {
@@ -112,16 +113,17 @@ public class TabPlayerController {
 	}
 
 	public void deletePlayer() {
-//		PlayerDVO player = tvListOfPlayers.getSelectionModel().getSelectedItem();
-//		tabPlayerService.deletePlayer(player);
-//		listOfPlayers.remove(player);
+		if (password.askForMasterPassword()) {
+			PlayerDVO player = tvListOfPlayers.getSelectionModel().getSelectedItem();
+			tabPlayerService.deletePlayer(player);
+			listOfPlayers.remove(player);
+		}
 	}
 
 	private void editPlayer(PlayerDVO playerDVO) {
 		FXMLLoader fxmlLoader = fxmlLoaderInst.get();
 		try {
-			URL fxmlRes = finder.findFxmlResource("playermanagement/PlayerEdit.fxml");
-			fxmlLoader.setLocation(fxmlRes);
+			fxmlLoader.setLocation(FxmlResource.PLAYERMANAGEMENT_EDIT.getResourceUrl());
 			BorderPane root = fxmlLoader.load();
 			Scene scene = new Scene(root);
 			Stage newWindow = new Stage();

@@ -81,7 +81,7 @@
 		<dependency>
 			<groupId>com.andwari.core</groupId>
 			<artifactId>tournamentcore</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.4</version>
 		</dependency>
 
 		<dependency>

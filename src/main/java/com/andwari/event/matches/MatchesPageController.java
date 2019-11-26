@@ -15,6 +15,7 @@ import com.andwari.event.matches.dvos.MatchListDvo;
 import com.andwari.event.rankings.dvos.RankingsDvo;
 import com.andwari.event.standingoverview.StandingFinalOverviewController;
 import com.andwari.event.standingoverview.StandingOverviewController;
+import com.andwari.password.PasswordHandler;
 import com.andwari.util.FxmlResource;
 
 import javafx.collections.FXCollections;
@@ -58,7 +59,7 @@ public class MatchesPageController implements Serializable {
 	private static final String lbRoundText = "Matches - Round ";
 
 	@FXML
-	private Button btnPrev, btnNext, btnFinish, btnFinishEvent, btnRevokeRound;
+	private Button btnPrev, btnNext, btnFinish, btnFinishEvent, btnRevokeRound, btnReopenEvent, btnAddPlayer;
 
 	private Round round;
 
@@ -73,6 +74,9 @@ public class MatchesPageController implements Serializable {
 
 	@Inject
 	private Instance<FXMLLoader> instanceOfLoader;
+
+	@Inject
+	private PasswordHandler passwordHandler;
 
 	public void initialize(Round round) {
 		this.round = round;
@@ -118,15 +122,26 @@ public class MatchesPageController implements Serializable {
 		}
 		if (round.getEvent().getMaxNumberOfRounds() == roundNumber) {
 			btnFinish.setDisable(true);
-			btnFinishEvent.setVisible(true);
+			if (round.getFinished()) {
+				btnFinishEvent.setDisable(true);
+				btnReopenEvent.setVisible(true);
+				btnReopenEvent.setDisable(false);
+			} else {
+				btnFinishEvent.setVisible(true);
+				btnFinishEvent.setDisable(false);
+				btnReopenEvent.setDisable(true);
+			}
 		} else {
+			btnReopenEvent.setVisible(false);
 			btnFinishEvent.setVisible(false);
 		}
 		if (round.getEvent().getCurrentRound() == 1) {
 			btnRevokeRound.setDisable(true);
-		} else {
+		} else if (round.getFinished() && round.getEvent().getMaxNumberOfRounds() == roundNumber) {
+			btnRevokeRound.setDisable(true);
+		} else
 			btnRevokeRound.setDisable(false);
-		}
+
 	}
 
 	public void updateMatch(Match match, MatchListDvo dvo) {
@@ -273,5 +288,29 @@ public class MatchesPageController implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Resets ranking points if some were given. Then simply revokes the last round.
+	 */
+	public void reopenEvent() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Reopen Event");
+		alert.setHeaderText("Please confirm");
+		alert.setContentText("Carefull! Reopening the event will delete all Rank-Points if some where given.\n"
+				+ "When the event is finished again, they will be calculated anew.\n\n"
+				+ "Allows to revoke the last round.");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			if (passwordHandler.askForMasterPassword()) {
+				pageService.resetGivenRankingPoints(round.getEvent());
+				Round prevRound = pageService.revokeRound(round);
+				initialize(prevRound);
+			}
+		}
+	}
+
+	public void addPlayerToEvent() {
+
 	}
 }
